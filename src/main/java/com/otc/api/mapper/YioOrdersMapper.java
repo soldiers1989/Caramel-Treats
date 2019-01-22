@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import com.otc.api.pojo.index.IndexReport;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -36,6 +37,15 @@ public interface YioOrdersMapper {
 
 	@Delete("delete from yio_orders where id=#{id}")
 	int delete(YioOrders yioOrders);
+
+	@Select("SELECT sum(order_price) FROM yio_orders where date(createdAt) = date(#{date}) and pay_qr = #{appId} and pay_status ='已支付'")
+	BigDecimal sumByDate(@Param("appId") String appId,@Param("date") Date date,@Param("status") String status);
+
+	@Select("SELECT sum(order_price) as amount,date(createdAt) as date FROM yio_orders where pay_status ='已支付' and pay_qr = #{appId} group by date(createdAt) order by date desc limit #{limit}")
+	List<IndexReport> report(@Param("appId") String appId,@Param("limit") Integer limit);
+
+	@Select("SELECT count(id) FROM yio_orders WHERE date(createdAt) = date(#{date}) and pay_qr = #{appId} and pay_status ='已支付'")
+	Integer countByCreateDate(@Param("appId") String appId,@Param("date") Date date);
 
 	@Select("<script>" +
 			"select sum(order_price) from yio_orders,yio_shop,yio_user where yio_orders.user_id=yio_user.id and app_id=extension and yio_orders.createdAt between #{date1} and #{date2}" +

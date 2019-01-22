@@ -1,5 +1,7 @@
 package com.otc.api.aop;
 
+import com.otc.api.domain.YioShop;
+import com.otc.api.mapper.YioShopMapper;
 import com.otc.api.result.ApiResult;
 import com.otc.api.util.StringUtils;
 import com.github.pagehelper.PageInfo;
@@ -29,6 +31,9 @@ import java.util.Map;
 @Configuration
 public class TokenAspect {
 
+	@Autowired
+	private YioShopMapper yioShopMapper;
+
 	// 定义切点Pointcut
 	@Pointcut("execution(public * com.otc.api.web..*.*(..))")
 	public void excudeService() {
@@ -46,7 +51,18 @@ public class TokenAspect {
 		Method method = ms.getMethod();
 		Gson g = new Gson();
 		String uuid = request.getHeader("uuid");
-
+		if (method.getAnnotation(Token.class) != null && method.getAnnotation(Token.class).value()) {
+			if (StringUtils.isBlank(uuid)) {
+				return g.toJson(new ApiResult(40001));
+			}else{
+				YioShop user = yioShopMapper.findAllByToken(uuid);
+				if (user==null){
+					return g.toJson(new ApiResult(40002));
+				}else {
+					request.setAttribute("user",user);
+				}
+			}
+		}
 		Object result = pjp.proceed();
 		
 		if(result instanceof PageInfo){

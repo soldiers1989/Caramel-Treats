@@ -3,10 +3,10 @@ package com.otc.api.db;
 import java.sql.*;
 
 public class DBHelper {
-	public static final String url = "jdbc:mysql://47.93.120.116:3306/otc";
+	public static final String url = "jdbc:mysql://127.0.0.1:3306/otc";
 	public static final String name = "com.mysql.jdbc.Driver";
 	public static final String user = "root";
-	public static final String password = "#FJS87vzx$i#";
+	public static final String password = "123456";
 
 	public Connection conn = null;
 	public PreparedStatement pst = null;

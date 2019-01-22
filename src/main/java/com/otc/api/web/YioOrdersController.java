@@ -25,13 +25,6 @@ public class YioOrdersController {
 	@Autowired
 	private YioOrdersService yioOrdersService;
 
-	//@Token
-	//@ApiOperation(value = "接口描述", notes = "" ,response=YioOrders.class)
-	@RequestMapping(method = {RequestMethod.POST, RequestMethod.GET},produces = "application/json")
-	public Object getList(@Param("page") Integer page,@RequestParam(value = "uuid", required = false) String uuid) throws MyException {
-		List<YioOrders> r = yioOrdersService.getAll();
-		return r;
-	}
 	@ApiOperation(value = "今天", notes = "" ,response=YioOrders.class)
 	@RequestMapping(value="/today",method = RequestMethod.GET,produces = "application/json")
 	public Object today(@Param("shopname") String shopname, @Param("minPrice") BigDecimal minPrice, @Param("bigPrice") BigDecimal maxPrice,@Param("username") String username){

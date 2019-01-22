@@ -17,15 +17,15 @@ public class GenEntityUtil {
 	private StringBuffer insertResult = new StringBuffer("");
 	private StringBuffer insertValue = new StringBuffer("");
 	private StringBuffer updateResult = new StringBuffer("");
-//
-//	public static void main(String[] args) throws IOException {
-//		String packagePath = "com.otc.api";
-//		String tableName = "yio_ratio";
-//		GenEntityUtil g = new GenEntityUtil(packagePath, tableName);
+
+	public static void main(String[] args) throws IOException {
+		String packagePath = "com.otc.api";
+		String tableName = "yio_shop";
+		GenEntityUtil g = new GenEntityUtil(packagePath, tableName);
 //		g.wirtFileMapper(packagePath, tableName);
-////		g.wirtFileService(packagePath, tableName);
-////		g.wirtFileController(packagePath, tableName);
-//	}
+//		g.wirtFileService(packagePath, tableName);
+//		g.wirtFileController(packagePath, tableName);
+	}
 
 	public GenEntityUtil(String packagePath, String tableName) {
 		packagePath = packagePath + ".domain";

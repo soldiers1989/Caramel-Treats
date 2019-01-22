@@ -1,0 +1,69 @@
+package com.otc.api.mapper;
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectKey;
+import org.apache.ibatis.annotations.Update;
+
+import com.otc.api.domain.YioOrders;
+
+@Mapper
+public interface YioOrdersMapper {
+
+	@Results({ @Result(property = "id", column = "id"),@Result(property = "orderId", column = "order_id"),@Result(property = "orderPrice", column = "order_price"),@Result(property = "payPrice", column = "pay_price"),@Result(property = "payStatus", column = "pay_status"),@Result(property = "payType", column = "pay_type"),@Result(property = "payFormat", column = "pay_format"),@Result(property = "payQr", column = "pay_qr"),@Result(property = "redirectUrl", column = "redirect_url"),@Result(property = "extension", column = "extension"),@Result(property = "createdAt", column = "createdAt"),@Result(property = "updatedAt", column = "updatedAt"),@Result(property = "deletedAt", column = "deletedAt"),@Result(property = "sellerId", column = "seller_id"),@Result(property = "userId", column = "user_id"),@Result(property = "type", column = "type")})
+	@Select("SELECT * FROM yio_orders WHERE id = #{id}")
+	YioOrders findById(@Param("id") Integer id);
+
+	@Results({ @Result(property = "id", column = "id"),@Result(property = "orderId", column = "order_id"),@Result(property = "orderPrice", column = "order_price"),@Result(property = "payPrice", column = "pay_price"),@Result(property = "payStatus", column = "pay_status"),@Result(property = "payType", column = "pay_type"),@Result(property = "payFormat", column = "pay_format"),@Result(property = "payQr", column = "pay_qr"),@Result(property = "redirectUrl", column = "redirect_url"),@Result(property = "extension", column = "extension"),@Result(property = "createdAt", column = "createdAt"),@Result(property = "updatedAt", column = "updatedAt"),@Result(property = "deletedAt", column = "deletedAt"),@Result(property = "sellerId", column = "seller_id"),@Result(property = "userId", column = "user_id"),@Result(property = "type", column = "type")})
+	@Select("SELECT * FROM yio_orders")
+	List<YioOrders> findAll();
+
+	@Insert("insert into yio_orders (order_id,order_price,pay_price,pay_status,pay_type,pay_format,pay_qr,redirect_url,extension,createdAt,updatedAt,deletedAt,seller_id,user_id,type) values (#{orderId},#{orderPrice},#{payPrice},#{payStatus},#{payType},#{payFormat},#{payQr},#{redirectUrl},#{extension},#{createdAt},#{updatedAt},#{deletedAt},#{sellerId},#{userId},#{type})")
+	@SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=false, resultType=Integer.class)
+	int insert(YioOrders yioOrders);
+
+	@Update("update yio_orders set order_id=#{orderId},order_price=#{orderPrice},pay_price=#{payPrice},pay_status=#{payStatus},pay_type=#{payType},pay_format=#{payFormat},pay_qr=#{payQr},redirect_url=#{redirectUrl},extension=#{extension},createdAt=#{createdAt},updatedAt=#{updatedAt},deletedAt=#{deletedAt},seller_id=#{sellerId},user_id=#{userId},type=#{type} where id=#{id}")
+	int update(YioOrders yioOrders);
+
+	@Delete("delete from yio_orders where id=#{id}")
+	int delete(YioOrders yioOrders);
+
+	@Select("<script>" +
+			"select sum(order_price) from yio_orders,yio_shop,yio_user where yio_orders.user_id=yio_user.id and app_id=extension and yio_orders.createdAt between #{date1} and #{date2}" +
+			"<if test=\"name!=null and name!=''\">"+
+			"and name=#{name}" +
+			"</if>" +
+			"<if test=\"minPrice!=null and maxPrice!=null\">"+
+			"and order_price between #{minPrice} and #{maxPrice}"+
+			"</if>"+
+			"<if test=\"username!=null and username!=''\">"+
+			"and username=#{username}"+
+			"</if>"+
+			"</script>")
+	BigDecimal findOrderPriceByDate(@Param("date1") Date date1, @Param("date2") Date date2 ,@Param("name") String name,@Param("minPrice") BigDecimal minPrice,@Param("maxPrice") BigDecimal maxPrice,@Param("username")String username);
+
+	@Select("SELECT count(order_price) FROM yio_orders WHERE createdAt between #{date1} and #{date2}")
+	int findOrderCountByDate(@Param("date1") Date date1, @Param("date2") Date date2);
+
+	@Select("SELECT sum(pay_price) FROM yio_orders WHERE createdAt between #{date1} and #{date2}")
+	BigDecimal findPayPriceByDate(@Param("date1") Date date1, @Param("date2") Date date2);
+
+	@Select("SELECT count(pay_price) FROM yio_orders WHERE createdAt between #{date1} and #{date2}")
+	int findPayCountByDate(@Param("date1") Date date1, @Param("date2") Date date2);
+
+	@Select("SELECT sum(order_price) FROM yio_orders WHERE createdAt between #{date1} and #{date2} and type=2")
+	BigDecimal getPriceByDate(@Param("date1") Date date1, @Param("date2") Date date2);
+
+	@Select("SELECT count(order_price) FROM yio_orders WHERE createdAt between #{date1} and #{date2} and type=2")
+	int getCountByDate(@Param("date1") Date date1, @Param("date2") Date date2);
+
+}

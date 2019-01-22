@@ -20,7 +20,7 @@ public class GenEntityUtil {
 
 	public static void main(String[] args) throws IOException {
 		String packagePath = "com.otc.api";
-		String tableName = "yio_withdraw";
+		String tableName = "yio_seller";
 		GenEntityUtil g = new GenEntityUtil(packagePath, tableName);
 		g.wirtFileMapper(packagePath, tableName);
 		g.wirtFileService(packagePath, tableName);

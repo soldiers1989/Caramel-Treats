@@ -63,6 +63,24 @@ public class TokenAspect {
 				}
 			}
 		}
+		if (method.getAnnotation(TokenAdmin.class) != null && method.getAnnotation(TokenAdmin.class).value()) {
+			if (StringUtils.isBlank(uuid)) {
+				return g.toJson(new ApiResult(40001));
+			}else{
+				YioShop user = yioShopMapper.findAllByToken(uuid);
+				if (user==null){
+					return g.toJson(new ApiResult(40002));
+				}else {
+					if (!user.getAuthority().equals(1)){
+						return g.toJson(new ApiResult(40002));
+					}else{
+						request.setAttribute("user",user);
+					}
+
+				}
+			}
+		}
+
 		Object result = pjp.proceed();
 		
 		if(result instanceof PageInfo){

@@ -26,6 +26,9 @@ public interface YioShopMapper {
 	@Select("SELECT * FROM yio_shop")
 	List<YioShop> findAll();
 
+	@Select("SELECT count(id) FROM yio_shop")
+	Integer count();
+
 	@Results({ @Result(property = "id", column = "id"),@Result(property = "name", column = "name"),@Result(property = "privateKey", column = "private_key"),@Result(property = "createAt", column = "createAt"),@Result(property = "appId", column = "app_id"),@Result(property = "username", column = "username"),@Result(property = "password", column = "password"),@Result(property = "loginTime", column = "login_time"),@Result(property = "authority", column = "authority"),@Result(property = "token", column = "token")})
 	@Select("SELECT id,name FROM yio_shop WHERE id = #{id}")
 	List<Shop> findId(@Param("id") Integer id);

@@ -31,7 +31,7 @@ public class YioShopController {
 	@ApiOperation(value = "列表", notes = "" ,response=YioShop.class)
 	@RequestMapping(value = "/list",method = RequestMethod.GET,produces = "application/json")
 	public Object list(HttpServletRequest request) throws MyException {
-		YioShop user=(YioShop)request.getAttribute("user");
+		YioShop user = (YioShop)request.getAttribute("user");
 		return yioShopService.list(user);
 	}
 

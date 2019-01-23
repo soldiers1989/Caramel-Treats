@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import com.otc.api.pojo.order.OrderList;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -48,4 +49,100 @@ public interface YioWithdrawMapper {
 
 	@Select("SELECT count(id) FROM yio_withdraw where app_id =#{appId} and pay_status = #{payStatus} and date(createdAt) = date(#{date})")
 	Integer countByStatusAndDate(@Param("appId") String appId, @Param("payStatus") Integer payStatus,@Param("date") Date date);
+
+	@Select("SELECT sum(amount) FROM yio_withdraw where user_id =#{userId} and pay_status = 2 and createdAt between #{date1} and #{date2}")
+	BigDecimal sumByDate(@Param("userId") Integer userId,@Param("date1") Date date1, @Param("date2") Date date2);
+
+	@Select("SELECT count(id) FROM yio_withdraw where user_id =#{userId} and pay_status = 2 and createdAt between #{date1} and #{date2}")
+	Integer countByDate(@Param("userId") Integer userId,@Param("date1") Date date1, @Param("date2") Date date2);
+
+	@Select("<script>" +
+			"select sum(amount) from yio_withdraw o,yio_user u where u.id = o.user_id and o.app_id=#{appId}" +
+			"<if test=\"start!=null\">"+
+				"and o.createdAt between #{start} and #{end} " +
+			"</if>" +
+			"<if test=\"orderId!=null and orderId!=null\">"+
+				"and o.orderId = #{orderId}"+
+			"</if>"+
+			"<if test=\"orderNo!=null and orderNo!=''\">"+
+				"and o.withdrawNo=#{orderNo}"+
+			"</if>"+
+			"<if test=\"username!=null and username!=''\">"+
+				"and u.username=#{username}"+
+			"</if>"+
+			"</script>")
+	BigDecimal querySumAmount(@Param("appId") String appId,@Param("start") Date start,@Param("end") Date end,@Param("orderId") String orderId,@Param("orderNo") String orderNo,@Param("username") String username);
+
+	@Select("<script>" +
+			"select count(o.id) from yio_withdraw o,yio_user u where u.id = o.user_id and o.app_id=#{appId}" +
+			"<if test=\"start!=null\">"+
+			"and o.createdAt between #{start} and #{end} " +
+			"</if>" +
+			"<if test=\"orderId!=null and orderId!=null\">"+
+			"and o.orderId = #{orderId}"+
+			"</if>"+
+			"<if test=\"orderNo!=null and orderNo!=''\">"+
+			"and o.withdrawNo=#{orderNo}"+
+			"</if>"+
+			"<if test=\"username!=null and username!=''\">"+
+			"and u.username=#{username}"+
+			"</if>"+
+			"</script>")
+	Integer queryCountAmount(@Param("appId") String appId,@Param("start") Date start,@Param("end") Date end,@Param("orderId") String orderId,@Param("orderNo") String orderNo,@Param("username") String username);
+
+	@Select("<script>" +
+			"select sum(amount) from yio_withdraw o,yio_user u where u.id = o.user_id and o.app_id=#{appId} and pay_status = 2" +
+			"<if test=\"start!=null\">"+
+			"and o.createdAt between #{start} and #{end} " +
+			"</if>" +
+			"<if test=\"orderId!=null and orderId!=null\">"+
+			"and o.orderId = #{orderId}"+
+			"</if>"+
+			"<if test=\"orderNo!=null and orderNo!=''\">"+
+			"and o.withdrawNo=#{orderNo}"+
+			"</if>"+
+			"<if test=\"username!=null and username!=''\">"+
+			"and u.username=#{username}"+
+			"</if>"+
+			"</script>")
+	BigDecimal querySumAmountByStatus(@Param("appId") String appId,@Param("start") Date start,@Param("end") Date end,@Param("orderId") String orderId,@Param("orderNo") String orderNo,@Param("username") String username);
+
+	@Select("<script>" +
+			"select count(o.id) from yio_withdraw o,yio_user u where u.id = o.user_id and o.app_id=#{appId} and pay_status = 2" +
+			"<if test=\"start!=null\">"+
+			"and o.createdAt between #{start} and #{end} " +
+			"</if>" +
+			"<if test=\"orderId!=null and orderId!=null\">"+
+			"and o.orderId = #{orderId}"+
+			"</if>"+
+			"<if test=\"orderNo!=null and orderNo!=''\">"+
+			"and o.withdrawNo=#{orderNo}"+
+			"</if>"+
+			"<if test=\"username!=null and username!=''\">"+
+			"and u.username=#{username}"+
+			"</if>"+
+			"</script>")
+	Integer queryCountAmountByStatus(@Param("appId") String appId,@Param("start") Date start,@Param("end") Date end,@Param("orderId") String orderId,@Param("orderNo") String orderNo,@Param("username") String username);
+
+
+	@Select("<script>" +
+			"select o.id,o.createdAt,o.orderId as orderId,o.withdraw_no as extension, o.amount as orderPrice,o.amount as payPrice,o.pay_status as type from yio_withdraw o,yio_user u where u.id = o.user_id and o.app_id=#{appId}" +
+			"<if test=\"start!=null\">"+
+				"and o.createdAt between #{start} and #{end} " +
+			"</if>" +
+			"<if test=\"orderId!=null and orderId!=null\">"+
+				"and o.orderId = #{orderId}"+
+			"</if>"+
+			"<if test=\"orderNo!=null and orderNo!=''\">"+
+				"and o.withdrawNo=#{orderNo}"+
+			"</if>"+
+			"<if test=\"username!=null and username!=''\">"+
+				"and u.username=#{username}"+
+			"</if>"+
+			"<if test=\"type!=null\">"+
+				"and o.pay_status=#{type}"+
+			"</if>"+
+			"</script>")
+	List<OrderList> query(@Param("type") Integer type, @Param("appId") String appId, @Param("start") Date start, @Param("end") Date end, @Param("orderId") String orderId, @Param("orderNo") String orderNo, @Param("username") String username);
+
 }

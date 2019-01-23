@@ -1,5 +1,6 @@
 package com.otc.api.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 public class YioOrders {
 
@@ -8,9 +9,9 @@ public class YioOrders {
 	//
 	private String orderId;
 	//
-	private double orderPrice;
+	private BigDecimal orderPrice;
 	//
-	private double payPrice;
+	private BigDecimal payPrice;
 	//
 	private String payStatus;
 	//
@@ -52,20 +53,20 @@ public class YioOrders {
 		return orderId;
 	}
 
-	public void setOrderPrice(double orderPrice){
-		this.orderPrice=orderPrice;
-	}
-
-	public double getOrderPrice(){
+	public BigDecimal getOrderPrice() {
 		return orderPrice;
 	}
 
-	public void setPayPrice(double payPrice){
-		this.payPrice=payPrice;
+	public void setOrderPrice(BigDecimal orderPrice) {
+		this.orderPrice = orderPrice;
 	}
 
-	public double getPayPrice(){
+	public BigDecimal getPayPrice() {
 		return payPrice;
+	}
+
+	public void setPayPrice(BigDecimal payPrice) {
+		this.payPrice = payPrice;
 	}
 
 	public void setPayStatus(String payStatus){

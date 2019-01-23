@@ -4,11 +4,15 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.otc.api.domain.YioShop;
 import com.otc.api.mapper.YioShopMapper;
 import com.otc.api.mapper.YioWithdrawMapper;
 import com.otc.api.pojo.index.Index;
 import com.otc.api.pojo.index.IndexReport;
+import com.otc.api.pojo.order.OrderList;
+import com.otc.api.pojo.order.OrderReport;
 import com.otc.api.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +29,6 @@ public class YioOrdersService {
 
 	@Autowired
 	private YioWithdrawMapper yioWithdrawMapper;
-
 
 	/**
 	 * 首页接口
@@ -71,17 +74,65 @@ public class YioOrdersService {
 	}
 
 
-	public void today(String shopname,BigDecimal minPrice,BigDecimal maxPrice,String username){
-		Date date=new Date();
-		Date date1=DateUtils.getStartDay(date);
-		Date date2=DateUtils.getEndDay(date);
-		BigDecimal a=yioOrdersMapper.findOrderPriceByDate(date1,date2,shopname,minPrice,maxPrice,username);
-		int b=yioOrdersMapper.findOrderCountByDate(date1,date2);
-		BigDecimal c=yioOrdersMapper.findPayPriceByDate(date1,date2);
-		int d=yioOrdersMapper.findPayCountByDate(date1,date2);
-		BigDecimal e=yioOrdersMapper.getPriceByDate(date1,date2);
-		int f=yioOrdersMapper.getCountByDate(date1,date2);
+	public OrderReport report(Integer id,YioShop shop,Date start,Date end,Integer type,String orderNo,String serverNo,String userName){
+		OrderReport report = new OrderReport();
+		if (shop.getAuthority().equals(1)){
+			if (id == 0){
+				shop = yioShopMapper.findAll().get(0);
+			}else {
+				shop = yioShopMapper.findById(id);
+			}
+		}
+		if (type.equals(1)){
+			start = DateUtils.getStartDay(DateUtils.startDate(new Date()));
+			end = DateUtils.getEndDay(DateUtils.startDate(new Date()));
+		}else if (type.equals(2)){
+			start = DateUtils.getStartDay(DateUtils.startDate(DateUtils.addDate(new Date(),-1)));
+			end = DateUtils.getEndDay(DateUtils.startDate(DateUtils.addDate(new Date(),-1)));
+		}else if (type.equals(3)){
+			start = DateUtils.getStartDay(DateUtils.startDate(DateUtils.addDate(new Date(),-7)));
+			end = DateUtils.getEndDay(DateUtils.startDate(new Date()));
+		}else if (type.equals(4)){
+			start = DateUtils.getStartDay(DateUtils.startDate(DateUtils.addDate(new Date(),-30)));
+			end = DateUtils.getEndDay(DateUtils.startDate(new Date()));
+		}
+		report.setTotal(yioOrdersMapper.querySumOrderPrice(shop.getAppId(),start,end,orderNo,serverNo,userName));
+		report.setTotalCount(yioOrdersMapper.queryCountOrderPrice(shop.getAppId(),start,end,orderNo,serverNo,userName));
+		report.setFinishTotal(yioOrdersMapper.querySumOrderPriceAndStatus(shop.getAppId(),start,end,orderNo,serverNo,userName));
+		report.setFinishCount(yioOrdersMapper.queryCountOrderPriceAndStatus(shop.getAppId(),start,end,orderNo,serverNo,userName));
+		report.setInTotal(yioOrdersMapper.querySumPayPrice(shop.getAppId(),start,end,orderNo,serverNo,userName));
+		report.setInCount(yioOrdersMapper.queryCountOrderPriceAndStatus(shop.getAppId(),start,end,orderNo,serverNo,userName));
+		return report;
 	}
 
+	public PageInfo<OrderList> list(Integer id, YioShop shop, Date start, Date end, Integer type, String orderNo, String serverNo, String userName, Integer status,Integer page,Integer size){
+		if (shop.getAuthority().equals(1)){
+			if (id == 0){
+				shop = yioShopMapper.findAll().get(0);
+			}else {
+				shop = yioShopMapper.findById(id);
+			}
+		}
+		if (type.equals(1)){
+			start = DateUtils.getStartDay(DateUtils.startDate(new Date()));
+			end = DateUtils.getEndDay(DateUtils.startDate(new Date()));
+		}else if (type.equals(2)){
+			start = DateUtils.getStartDay(DateUtils.startDate(DateUtils.addDate(new Date(),-1)));
+			end = DateUtils.getEndDay(DateUtils.startDate(DateUtils.addDate(new Date(),-1)));
+		}else if (type.equals(3)){
+			start = DateUtils.getStartDay(DateUtils.startDate(DateUtils.addDate(new Date(),-7)));
+			end = DateUtils.getEndDay(DateUtils.startDate(new Date()));
+		}else if (type.equals(4)){
+			start = DateUtils.getStartDay(DateUtils.startDate(DateUtils.addDate(new Date(),-30)));
+			end = DateUtils.getEndDay(DateUtils.startDate(new Date()));
+		}
+		if (status ==null || status.equals(0)){
+			status = null;
+		}
+		PageHelper.startPage(page,size);
+		List<OrderList> orderLists = yioOrdersMapper.query(status,shop.getAppId(),start,end,orderNo,serverNo,userName);
+		PageInfo<OrderList> info = new PageInfo<>(orderLists);
+		return info;
+	}
 
 }

@@ -1,14 +1,19 @@
 package com.otc.api.web;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import com.otc.api.aop.Token;
+import com.otc.api.aop.TokenAdmin;
 import com.otc.api.domain.YioShop;
 import io.swagger.annotations.Api;
 
 import io.swagger.annotations.ApiOperation;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import com.otc.api.domain.YioUser;
 import com.otc.api.service.YioUserService;
@@ -24,6 +29,12 @@ public class YioUserController {
 
 	@Autowired
 	private YioUserService yioUserService;
+
+	@InitBinder
+	protected void initBinder(WebDataBinder binder) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
+	}
 
 	@Token
 	@ApiOperation(value = "交易员统计", notes = "" ,response=YioUser.class)
@@ -45,12 +56,32 @@ public class YioUserController {
 		return yioUserService.list(username,work,pageNo,sizeNo);
 	}
 
-	@Token
+	@TokenAdmin
 	@ApiOperation(value = "修改状态", notes = "" ,response=YioUser.class)
 	@RequestMapping(value = "/updateStatus/{id}",method = RequestMethod.PUT,produces = "application/json")
 	public Object updateStatus(@PathVariable("id") Integer id, HttpServletRequest request) throws MyException {
 		YioShop user = (YioShop)request.getAttribute("user");
 		yioUserService.updateStatus(id);
 		return null;
+	}
+
+	@TokenAdmin
+	@ApiOperation(value = "详情", notes = "" ,response=YioUser.class)
+	@RequestMapping(value = "/show/{id}",method = RequestMethod.GET,produces = "application/json")
+	public Object show(@PathVariable("id") Integer id, HttpServletRequest request) throws MyException {
+		YioShop user = (YioShop)request.getAttribute("user");
+		return yioUserService.show(id);
+	}
+
+	@TokenAdmin
+	@ApiOperation(value = "详情", notes = "" ,response=YioUser.class)
+	@RequestMapping(value = "/show/report/{id}",method = RequestMethod.GET,produces = "application/json")
+	public Object showReport(@PathVariable("id") Integer id,
+							 @RequestParam(value = "start",required = false) Date start,
+							 @RequestParam(value = "end",required = false) Date end,
+							 @RequestParam(value = "type",required = false) Integer type,
+							 HttpServletRequest request) throws MyException {
+		YioShop user = (YioShop)request.getAttribute("user");
+		return yioUserService.showReport(id,start,end,type);
 	}
 }

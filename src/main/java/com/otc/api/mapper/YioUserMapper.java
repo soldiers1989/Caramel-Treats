@@ -2,6 +2,7 @@ package com.otc.api.mapper;
 
 import java.util.List;
 
+import com.otc.api.pojo.user.UserDetail;
 import com.otc.api.pojo.user.UserList;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
@@ -55,4 +56,10 @@ public interface YioUserMapper {
 			"</if>"+
 			"</script>")
 	List<UserList> query(@Param("username") String username,@Param("work") Integer wrok);
+
+
+	@Select("SELECT id,username,(select sum(amount) from yio_account where user_id = u.id) as amount,(SELECT sum(stream) FROM yio_bill where user_id = u.id) as reward,work,status,(select sum(amount) from yio_withdraw where user_id =u.id and pay_status = 1) as withdraw FROM yio_user u WHERE u.id=#{id}")
+	UserDetail findId(@Param("id") Integer id);
+
+
 }

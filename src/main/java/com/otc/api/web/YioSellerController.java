@@ -2,8 +2,10 @@ package com.otc.api.web;
 
 import java.util.List;
 
+import com.otc.api.aop.TokenAdmin;
 import io.swagger.annotations.Api;
 
+import io.swagger.annotations.ApiOperation;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +17,9 @@ import com.otc.api.service.YioSellerService;
 import com.otc.api.exception.MyException;
 import com.otc.api.result.ApiResult;
 
-@Api("描述")
+import javax.servlet.http.HttpServletRequest;
+
+@Api("交易员")
 @RestController
 @RequestMapping(value = "/yioSeller")
 public class YioSellerController {
@@ -23,11 +27,13 @@ public class YioSellerController {
 	@Autowired
 	private YioSellerService yioSellerService;
 
-	//@Token
-	//@ApiOperation(value = "接口描述", notes = "" ,response=YioSeller.class)
-	@RequestMapping(method = {RequestMethod.POST, RequestMethod.GET},produces = "application/json")
-	public Object getList(@Param("page") Integer page,@RequestParam(value = "uuid", required = false) String uuid) throws MyException {
-		List<YioSeller> r = yioSellerService.getAll();
-		return r;
+	@TokenAdmin
+	@ApiOperation(value = "交易员列表", notes = "" ,response=YioSeller.class)
+	@RequestMapping(value = "/list",method = RequestMethod.GET,produces = "application/json")
+	public Object list(@Param("id") Integer id,@Param("page") Integer page,
+					   @Param("size") Integer size,HttpServletRequest request) throws MyException {
+		int sizeNo = size == null ? 10 : size.intValue();
+		int pageNo = page == null ? 1 : page.intValue();
+		return yioSellerService.list(id,pageNo,sizeNo);
 	}
 }

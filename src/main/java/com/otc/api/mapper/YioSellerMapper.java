@@ -1,7 +1,8 @@
 package com.otc.api.mapper;
 
-import java.util.List; 
+import java.util.List;
 
+import com.otc.api.pojo.seller.SellerList;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -38,5 +39,6 @@ public interface YioSellerMapper {
 	@Delete("delete from yio_seller where id=#{id}")
 	int delete(YioSeller yioSeller);
 
-
+	@Select("SELECT id,username,name,type,(select amount from yio_account where seller_id = s.id) as amount, (select pant from yio_pant where seller_id = s.id) as pant FROM yio_seller s where s.user_id = #{userId}")
+	List<SellerList> findAllByUserId(@Param("userId") Integer userId);
 }

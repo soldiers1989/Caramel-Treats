@@ -19,6 +19,6 @@ public class Application extends SpringBootServletInitializer implements Embedde
 
 	public void customize(ConfigurableEmbeddedServletContainer arg0) {
 		// TODO Auto-generated method stub
-		arg0.setPort(8011);
+		arg0.setPort(8010);
 	}
 }

@@ -1,5 +1,6 @@
 package com.otc.api.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 public class YioWithdraw {
 
@@ -8,7 +9,7 @@ public class YioWithdraw {
 	//开发者的应用ID
 	private String appId;
 	//提现金额
-	private double amount;
+	private BigDecimal amount;
 	//业务系统订单id
 	private String orderId;
 	//提现方式1:支付宝 2:微信3:银行卡
@@ -56,12 +57,12 @@ public class YioWithdraw {
 		return appId;
 	}
 
-	public void setAmount(double amount){
-		this.amount=amount;
+	public BigDecimal getAmount() {
+		return amount;
 	}
 
-	public double getAmount(){
-		return amount;
+	public void setAmount(BigDecimal amount) {
+		this.amount = amount;
 	}
 
 	public void setOrderId(String orderId){

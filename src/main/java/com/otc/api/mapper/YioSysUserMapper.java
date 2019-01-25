@@ -36,15 +36,15 @@ public interface YioSysUserMapper {
 	@Delete("delete from yio_sys_user where id=#{id}")
 	int delete(YioSysUser yioSysUser);
 
-	@Results({ @Result(property = "id", column = "id"),@Result(property = "name", column = "name"),@Result(property = "privateKey", column = "private_key"),@Result(property = "createAt", column = "createAt"),@Result(property = "appId", column = "app_id"),@Result(property = "username", column = "username"),@Result(property = "password", column = "password"),@Result(property = "loginTime", column = "login_time"),@Result(property = "authority", column = "authority"),@Result(property = "token", column = "token")})
+	@Results({ @Result(property = "id", column = "id"),@Result(property = "username", column = "username"),@Result(property = "password", column = "password"),@Result(property = "token", column = "token"),@Result(property = "loginTime", column = "login_time"),@Result(property = "createTime", column = "create_time"),@Result(property = "authority", column = "authority"),@Result(property = "serverId", column = "server_id")})
 	@Select("SELECT * FROM yio_sys_user where username = #{username}")
 	List<YioSysUser> findAllByName(@Param("username") String username);
 
-	@Results({ @Result(property = "id", column = "id"),@Result(property = "name", column = "name"),@Result(property = "privateKey", column = "private_key"),@Result(property = "createAt", column = "createAt"),@Result(property = "appId", column = "app_id"),@Result(property = "username", column = "username"),@Result(property = "password", column = "password"),@Result(property = "loginTime", column = "login_time"),@Result(property = "authority", column = "authority"),@Result(property = "token", column = "token")})
+	@Results({ @Result(property = "id", column = "id"),@Result(property = "username", column = "username"),@Result(property = "password", column = "password"),@Result(property = "token", column = "token"),@Result(property = "loginTime", column = "login_time"),@Result(property = "createTime", column = "create_time"),@Result(property = "authority", column = "authority"),@Result(property = "serverId", column = "server_id")})
 	@Select("SELECT * FROM yio_sys_user where username = #{username} and password = #{password}")
 	List<YioSysUser> findAllByUserNameAndPass(@Param("username") String username,@Param("password") String password);
 
-	@Results({ @Result(property = "id", column = "id"),@Result(property = "name", column = "name"),@Result(property = "privateKey", column = "private_key"),@Result(property = "createAt", column = "createAt"),@Result(property = "appId", column = "app_id"),@Result(property = "username", column = "username"),@Result(property = "password", column = "password"),@Result(property = "loginTime", column = "login_time"),@Result(property = "authority", column = "authority"),@Result(property = "token", column = "token")})
+	@Results({ @Result(property = "id", column = "id"),@Result(property = "username", column = "username"),@Result(property = "password", column = "password"),@Result(property = "token", column = "token"),@Result(property = "loginTime", column = "login_time"),@Result(property = "createTime", column = "create_time"),@Result(property = "authority", column = "authority"),@Result(property = "serverId", column = "server_id")})
 	@Select("SELECT * FROM yio_sys_user where token = #{token}")
 	YioSysUser findAllByToken(@Param("token") String token);
 }

@@ -100,10 +100,10 @@ public interface YioAccountDetailMapper {
 			"and d.createAt between #{start} and #{end} " +
 			"</if>" +
 			"<if test=\"orderNo!=null and orderNo!=''\">"+
-			"and o.withdraw_no = #{orderNo}"+
+			"and o.order_id = #{orderNo}"+
 			"</if>"+
 			"<if test=\"serverNo!=null and serverNo!=''\">"+
-			"and o.orderId = #{serverNo}"+
+			"and o.extension = #{serverNo}"+
 			"</if>"+
 			"</script>")
 	Integer queryCount(@Param("appId") String appId, @Param("orderNo") String orderNo, @Param("serverNo") String serverNo, @Param("start") Date start, @Param("end") Date end);
@@ -114,10 +114,10 @@ public interface YioAccountDetailMapper {
 			"and d.createAt between #{start} and #{end} " +
 			"</if>" +
 			"<if test=\"orderNo!=null and orderNo!=''\">"+
-			"and o.withdraw_no = #{orderNo}"+
+			"and w.withdraw_no = #{orderNo}"+
 			"</if>"+
 			"<if test=\"serverNo!=null and serverNo!=''\">"+
-			"and o.orderId = #{serverNo}"+
+			"and w.orderId = #{serverNo}"+
 			"</if>"+
 			"</script>")
 	BigDecimal querySumServer(@Param("appId") String appId, @Param("orderNo") String orderNo, @Param("serverNo") String serverNo, @Param("start") Date start, @Param("end") Date end);
@@ -128,10 +128,10 @@ public interface YioAccountDetailMapper {
 			"and d.createAt between #{start} and #{end} " +
 			"</if>" +
 			"<if test=\"orderNo!=null and orderNo!=''\">"+
-			"and o.withdraw_no = #{orderNo}"+
+			"and w.withdraw_no = #{orderNo}"+
 			"</if>"+
 			"<if test=\"serverNo!=null and serverNo!=''\">"+
-			"and o.orderId = #{serverNo}"+
+			"and w.orderId = #{serverNo}"+
 			"</if>"+
 			"</script>")
 	Integer queryCountServer(@Param("appId") String appId, @Param("orderNo") String orderNo, @Param("serverNo") String serverNo, @Param("start") Date start, @Param("end") Date end);

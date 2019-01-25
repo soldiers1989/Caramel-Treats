@@ -53,7 +53,7 @@ public class YioWithdrawController {
 	}
 
 
-	@TokenAdmin
+	@Token
 	@ApiOperation(value = "充值交易", notes = "" ,response=YioSeller.class)
 	@RequestMapping(value = "/list/{id}",method = RequestMethod.GET,produces = "application/json")
 	public Object list(@PathVariable("id") Integer id,

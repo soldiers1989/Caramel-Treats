@@ -51,7 +51,7 @@ public class YioAccountDetailController {
 		return yioAccountDetailService.list(pageNo,sizeNo,user,orderNo,serverNo,start,end,type);
 	}
 
-	@Token
+	@TokenAdmin
 	@ApiOperation(value = "账单明细管理员", notes = "" ,response=YioAccountDetail.class)
 	@RequestMapping(value = "/listAdmin/{id}",method = RequestMethod.GET,produces = "application/json")
 	public Object listAdmin(@PathVariable("id") Integer id,@RequestParam(value = "start",required = false) Date start,
@@ -89,6 +89,6 @@ public class YioAccountDetailController {
 						 @RequestParam(value = "serverNo",required = false) String serverNo,
 						 HttpServletRequest request) throws MyException {
 		YioShop user = (YioShop)request.getAttribute("user");
-		return yioAccountDetailService.report(user,orderNo,serverNo,start,end,type);
+		return yioAccountDetailService.reportAdmin(id,user,orderNo,serverNo,start,end,type);
 	}
 }

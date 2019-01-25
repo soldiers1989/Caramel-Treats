@@ -1,6 +1,7 @@
 package com.otc.api.service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.github.pagehelper.PageHelper;
@@ -11,6 +12,7 @@ import com.otc.api.mapper.YioAccountMapper;
 import com.otc.api.mapper.YioSysSettleFileMapper;
 import com.otc.api.pojo.settle.SettleShow;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.otc.api.domain.YioSysSettle;
 import com.otc.api.mapper.YioSysSettleMapper;
@@ -25,6 +27,9 @@ public class YioSysSettleService {
 
 	@Autowired
 	private YioAccountMapper yioAccountMapper;
+
+	@Value("${URL}")
+	private String URL;
 
 	/**
 	 * 根据状态查询 清算订单
@@ -45,7 +50,14 @@ public class YioSysSettleService {
 	 * @return
 	 */
 	public List<SettleShow> show(Integer id){
-		return yioSysSettleMapper.findAllDetail(id);
+		List<SettleShow> settleShows = yioSysSettleMapper.findAllDetail(id);
+		List<SettleShow> shows = new ArrayList<>();
+		for (SettleShow show : settleShows){
+			show.setFileUrl(URL+show.getFileUrl());
+			show.setInFileUrl(URL+show.getInFileUrl());
+			shows.add(show);
+		}
+		return shows;
 	}
 
 	/**

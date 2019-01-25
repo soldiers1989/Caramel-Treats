@@ -18,14 +18,14 @@ public class GenEntityUtil {
 	private StringBuffer insertValue = new StringBuffer("");
 	private StringBuffer updateResult = new StringBuffer("");
 
-//	public static void main(String[] args) throws IOException {
-//		String packagePath = "com.otc.api";
-//		String tableName = "yio_account_detail";
-//		GenEntityUtil g = new GenEntityUtil(packagePath, tableName);
-//		g.wirtFileMapper(packagePath, tableName);
+	public static void main(String[] args) throws IOException {
+		String packagePath = "com.otc.api";
+		String tableName = "yio_account";
+		GenEntityUtil g = new GenEntityUtil(packagePath, tableName);
+		g.wirtFileMapper(packagePath, tableName);
 //		g.wirtFileService(packagePath, tableName);
 //		g.wirtFileController(packagePath, tableName);
-//	}
+	}
 
 	public GenEntityUtil(String packagePath, String tableName) {
 		packagePath = packagePath + ".domain";

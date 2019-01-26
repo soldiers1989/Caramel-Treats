@@ -10,6 +10,7 @@ import com.otc.api.domain.YioAccount;
 import com.otc.api.domain.YioSysSettleFile;
 import com.otc.api.mapper.YioAccountMapper;
 import com.otc.api.mapper.YioSysSettleFileMapper;
+import com.otc.api.mapper.YioWithdrawMapper;
 import com.otc.api.pojo.settle.SettleShow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +28,9 @@ public class YioSysSettleService {
 
 	@Autowired
 	private YioAccountMapper yioAccountMapper;
+
+	@Autowired
+	private YioWithdrawMapper yioWithdrawMapper;
 
 	@Value("${URL}")
 	private String URL;
@@ -89,8 +93,9 @@ public class YioSysSettleService {
 		//解冻结账
 		List<YioAccount> accounts = yioAccountMapper.findAllByUserId(sysSettle.getUserId());
 		for (YioAccount account : accounts){
-			account.setFrozen(account.getFrozen().subtract(sysSettle.getAmount()));
-			account.setToken(account.getToken().add(sysSettle.getAmount()));
+			BigDecimal frozen = yioWithdrawMapper.sumByUser(account.getUserId(),1);
+			account.setFrozen(frozen);
+			account.setToken(account.getTotal().subtract(account.getAmount()).subtract(frozen));
 			yioAccountMapper.update(account);
 		}
 	}

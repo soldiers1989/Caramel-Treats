@@ -38,6 +38,9 @@ public interface YioWithdrawMapper {
 	@Delete("delete from yio_withdraw where id=#{id}")
 	int delete(YioWithdraw yioWithdraw);
 
+	@Select("SELECT sum(amount) FROM yio_withdraw where user_id =#{userId} and pay_status = #{payStatus}")
+	BigDecimal sumByUser(@Param("userId") Integer userId, @Param("payStatus") Integer payStatus);
+
 	@Select("SELECT sum(amount) FROM yio_withdraw where app_id =#{appId} and pay_status = #{payStatus}")
 	BigDecimal sumByStatus(@Param("appId") String appId, @Param("payStatus") Integer payStatus);
 

@@ -24,6 +24,8 @@ public class YioAccount {
 	private BigDecimal token;
 	//冻结金额
 	private BigDecimal frozen;
+	//总额度
+	private BigDecimal total;
 
 	public Integer getId() {
 		return id;
@@ -103,5 +105,13 @@ public class YioAccount {
 
 	public void setFrozen(BigDecimal frozen) {
 		this.frozen = frozen;
+	}
+
+	public BigDecimal getTotal() {
+		return total;
+	}
+
+	public void setTotal(BigDecimal total) {
+		this.total = total;
 	}
 }

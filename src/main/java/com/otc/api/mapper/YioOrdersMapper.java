@@ -170,7 +170,7 @@ public interface YioOrdersMapper {
 
 	@Results({ @Result(property = "id", column = "id"),@Result(property = "orderId", column = "order_id"),@Result(property = "orderPrice", column = "order_price"),@Result(property = "payPrice", column = "pay_price"),@Result(property = "createdAt", column = "createdAt"),@Result(property = "type", column = "type")})
 	@Select("<script>" +
-			"select * from yio_orders o,yio_user u where u.id = o.user_id and o.pay_qr=#{appId}" +
+			"select *,u.username as username from yio_orders o,yio_user u where u.id = o.user_id and o.pay_qr=#{appId}" +
 			"<if test=\"start!=null\">"+
 				"and o.createdAt between #{start} and #{end} " +
 			"</if>" +

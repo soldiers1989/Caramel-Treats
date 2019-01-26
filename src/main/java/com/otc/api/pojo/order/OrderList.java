@@ -13,7 +13,16 @@ public class OrderList {
     private String extension;//业务订单号
     private BigDecimal orderPrice;//
     private BigDecimal payPrice;//
+    private String username;
     private Integer type;//1:未到帐 2:已到帐 3:已过期 4:部帐 5:清算
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public Integer getId() {
         return id;

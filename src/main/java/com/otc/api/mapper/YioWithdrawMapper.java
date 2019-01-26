@@ -126,7 +126,7 @@ public interface YioWithdrawMapper {
 
 
 	@Select("<script>" +
-			"select o.id,o.createdAt,o.orderId as orderId,o.withdraw_no as extension, o.amount as orderPrice,o.amount as payPrice,o.pay_status as type from yio_withdraw o,yio_user u where u.id = o.user_id and o.app_id=#{appId}" +
+			"select o.id,o.createdAt,o.orderId as orderId,o.withdraw_no as extension, o.amount as orderPrice,o.amount as payPrice,o.pay_status as type,u.username as username from yio_withdraw o,yio_user u where u.id = o.user_id and o.app_id=#{appId}" +
 			"<if test=\"start!=null\">"+
 				"and o.createdAt between #{start} and #{end} " +
 			"</if>" +

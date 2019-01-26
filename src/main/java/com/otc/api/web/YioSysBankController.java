@@ -69,7 +69,7 @@ public class YioSysBankController {
 	@ApiOperation(value = "删除", notes = "" ,response=YioSysBank.class)
 	@RequestMapping(value = "/updateStatus/{id}",method = RequestMethod.PUT,produces = "application/json")
 	public Object updateStatus(@PathVariable("id") Integer id,HttpServletRequest request) throws MyException {
-		yioSysBankService.delete(id);
+		yioSysBankService.updateStatus(id);
 		return null;
 	}
 

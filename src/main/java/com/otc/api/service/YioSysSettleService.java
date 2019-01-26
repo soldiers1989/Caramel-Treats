@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.otc.api.domain.YioSysSettle;
 import com.otc.api.mapper.YioSysSettleMapper;
+import org.springframework.transaction.annotation.Transactional;
+
 @Service
 public class YioSysSettleService {
 
@@ -82,6 +84,7 @@ public class YioSysSettleService {
 	 * 确认
 	 * @param yioSysSettle
 	 */
+	@Transactional(rollbackFor=Exception.class)
 	public void updateEnter(YioSysSettleFile yioSysSettle){
 		YioSysSettle sysSettle = yioSysSettleMapper.findById(yioSysSettle.getId());
 		sysSettle.setStatus(2);
@@ -94,6 +97,9 @@ public class YioSysSettleService {
 		List<YioAccount> accounts = yioAccountMapper.findAllByUserId(sysSettle.getUserId());
 		for (YioAccount account : accounts){
 			BigDecimal frozen = yioWithdrawMapper.sumByUser(account.getUserId(),1);
+			if (frozen == null){
+				frozen = new BigDecimal(0);
+			}
 			account.setFrozen(frozen);
 			account.setToken(account.getTotal().subtract(account.getAmount()).subtract(frozen));
 			yioAccountMapper.update(account);

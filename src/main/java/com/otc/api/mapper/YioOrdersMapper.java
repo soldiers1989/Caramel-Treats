@@ -186,6 +186,7 @@ public interface YioOrdersMapper {
 			"<if test=\"type!=null\">"+
 				"and o.type=#{type}"+
 			"</if>"+
+			" order by o.id desc"+
 			"</script>")
 	List<OrderList> query(@Param("type") Integer type,@Param("appId") String appId, @Param("start") Date start, @Param("end") Date end, @Param("orderId") String orderId, @Param("orderNo") String orderNo, @Param("username") String username);
 

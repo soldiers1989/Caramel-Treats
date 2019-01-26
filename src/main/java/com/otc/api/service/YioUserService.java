@@ -108,6 +108,9 @@ public class YioUserService {
 		}else if (type.equals(4)){
 			start = DateUtils.getStartDay(DateUtils.startDate(DateUtils.addDate(new Date(),-30)));
 			end = DateUtils.getEndDay(DateUtils.startDate(new Date()));
+		}else {
+			start = DateUtils.getStartDay(start);
+			end = DateUtils.getEndDay(end);
 		}
 		report.setRecharge(yioOrdersMapper.sumPayPrice(id,start,end));
 		report.setWithdraw(yioWithdrawMapper.sumByDate(id,start,end));

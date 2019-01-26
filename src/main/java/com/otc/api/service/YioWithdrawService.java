@@ -31,6 +31,8 @@ public class YioWithdrawService {
 			}else {
 				shop = yioShopMapper.findById(id);
 			}
+		}else {
+			shop = yioShopMapper.findById(id);
 		}
 		if (type.equals(1)){
 			start = DateUtils.getStartDay(DateUtils.startDate(new Date()));
@@ -44,6 +46,9 @@ public class YioWithdrawService {
 		}else if (type.equals(4)){
 			start = DateUtils.getStartDay(DateUtils.startDate(DateUtils.addDate(new Date(),-30)));
 			end = DateUtils.getEndDay(DateUtils.startDate(new Date()));
+		}else {
+			start = DateUtils.getStartDay(start);
+			end = DateUtils.getEndDay(end);
 		}
 		report.setTotal(yioWithdrawMapper.querySumAmount(shop.getAppId(),start,end,orderNo,serverNo,userName));
 		report.setTotalCount(yioWithdrawMapper.queryCountAmount(shop.getAppId(),start,end,orderNo,serverNo,userName));
@@ -61,6 +66,8 @@ public class YioWithdrawService {
 			}else {
 				shop = yioShopMapper.findById(id);
 			}
+		}else {
+			shop = yioShopMapper.findById(id);
 		}
 		if (type.equals(1)){
 			start = DateUtils.getStartDay(DateUtils.startDate(new Date()));
@@ -74,6 +81,9 @@ public class YioWithdrawService {
 		}else if (type.equals(4)){
 			start = DateUtils.getStartDay(DateUtils.startDate(DateUtils.addDate(new Date(),-30)));
 			end = DateUtils.getEndDay(DateUtils.startDate(new Date()));
+		}else {
+			start = DateUtils.getStartDay(start);
+			end = DateUtils.getEndDay(end);
 		}
 		if (status ==null || status.equals(0)){
 			status = null;

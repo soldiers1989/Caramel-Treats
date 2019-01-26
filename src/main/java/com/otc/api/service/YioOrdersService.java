@@ -43,6 +43,8 @@ public class YioOrdersService {
 			}else {
 				shop = yioShopMapper.findById(id);
 			}
+		}else {
+			shop = yioShopMapper.findById(id);
 		}
 		Index index = new Index();
 		index.setTodayBalance(yioOrdersMapper.sumByDate(shop.getAppId(),DateUtils.startDate(new Date()),"已支付"));
@@ -82,6 +84,8 @@ public class YioOrdersService {
 			}else {
 				shop = yioShopMapper.findById(id);
 			}
+		}else {
+			shop = yioShopMapper.findById(id);
 		}
 		if (type.equals(1)){
 			start = DateUtils.getStartDay(DateUtils.startDate(new Date()));
@@ -95,12 +99,15 @@ public class YioOrdersService {
 		}else if (type.equals(4)){
 			start = DateUtils.getStartDay(DateUtils.startDate(DateUtils.addDate(new Date(),-30)));
 			end = DateUtils.getEndDay(DateUtils.startDate(new Date()));
+		}else {
+			start = DateUtils.getStartDay(start);
+			end = DateUtils.getEndDay(end);
 		}
 		report.setTotal(yioOrdersMapper.querySumOrderPrice(shop.getAppId(),start,end,orderNo,serverNo,userName));
 		report.setTotalCount(yioOrdersMapper.queryCountOrderPrice(shop.getAppId(),start,end,orderNo,serverNo,userName));
 		report.setFinishTotal(yioOrdersMapper.querySumOrderPriceAndStatus(shop.getAppId(),start,end,orderNo,serverNo,userName));
 		report.setFinishCount(yioOrdersMapper.queryCountOrderPriceAndStatus(shop.getAppId(),start,end,orderNo,serverNo,userName));
-		report.setInTotal(yioOrdersMapper.querySumPayPrice(shop.getAppId(),start,end,orderNo,serverNo,userName));
+		report.setInTotal(yioOrdersMapper.querySumOrderPriceAndStatus(shop.getAppId(),start,end,orderNo,serverNo,userName));
 		report.setInCount(yioOrdersMapper.queryCountOrderPriceAndStatus(shop.getAppId(),start,end,orderNo,serverNo,userName));
 		return report;
 	}
@@ -112,6 +119,8 @@ public class YioOrdersService {
 			}else {
 				shop = yioShopMapper.findById(id);
 			}
+		}else {
+			shop = yioShopMapper.findById(id);
 		}
 		if (type.equals(1)){
 			start = DateUtils.getStartDay(DateUtils.startDate(new Date()));
@@ -125,6 +134,9 @@ public class YioOrdersService {
 		}else if (type.equals(4)){
 			start = DateUtils.getStartDay(DateUtils.startDate(DateUtils.addDate(new Date(),-30)));
 			end = DateUtils.getEndDay(DateUtils.startDate(new Date()));
+		}else {
+			start = DateUtils.getStartDay(start);
+			end = DateUtils.getEndDay(end);
 		}
 		if (status ==null || status.equals(0)){
 			status = null;

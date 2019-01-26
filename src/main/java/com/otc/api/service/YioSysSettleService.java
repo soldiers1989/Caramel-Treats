@@ -93,6 +93,5 @@ public class YioSysSettleService {
 			account.setToken(account.getToken().add(sysSettle.getAmount()));
 			yioAccountMapper.update(account);
 		}
-
 	}
 }

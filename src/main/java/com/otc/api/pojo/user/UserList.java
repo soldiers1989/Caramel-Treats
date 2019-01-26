@@ -53,7 +53,7 @@ public class UserList {
     public BigDecimal getReward() {
         if (reward==null)
             return new BigDecimal(0);
-        return reward;
+        return reward.divide(new BigDecimal(100)).setScale(2,BigDecimal.ROUND_DOWN);
     }
 
     public void setReward(BigDecimal reward) {

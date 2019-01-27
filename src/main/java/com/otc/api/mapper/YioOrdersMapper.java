@@ -175,13 +175,13 @@ public interface YioOrdersMapper {
 				"and o.createdAt between #{start} and #{end} " +
 			"</if>" +
 			"<if test=\"orderId!=null and orderId!=null\">"+
-				"and o.order_id = #{orderId}"+
+				"and o.order_id like \"%\"#{orderId}\"%\""+
 			"</if>"+
 			"<if test=\"orderNo!=null and orderNo!=''\">"+
-				"and o.extension=#{orderNo}"+
+				"and o.extension like \"%\"#{orderNo}\"%\""+
 			"</if>"+
 			"<if test=\"username!=null and username!=''\">"+
-				"and u.username=#{username}"+
+				"and u.username like \"%\"#{username}\"%\""+
 			"</if>"+
 			"<if test=\"type!=null\">"+
 				"and o.type=#{type}"+

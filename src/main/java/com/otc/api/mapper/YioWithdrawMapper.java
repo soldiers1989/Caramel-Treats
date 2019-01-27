@@ -134,13 +134,13 @@ public interface YioWithdrawMapper {
 				"and o.createdAt between #{start} and #{end} " +
 			"</if>" +
 			"<if test=\"orderId!=null and orderId!=null\">"+
-				"and o.orderId = #{orderId}"+
+				"and o.orderId like \"%\"#{orderId}\"%\""+
 			"</if>"+
 			"<if test=\"orderNo!=null and orderNo!=''\">"+
-				"and o.withdrawNo=#{orderNo}"+
+				"and o.withdrawNo like \"%\"#{orderNo}\"%\""+
 			"</if>"+
 			"<if test=\"username!=null and username!=''\">"+
-				"and u.username=#{username}"+
+				"and u.username like \"%\"#{username}\"%\""+
 			"</if>"+
 			"<if test=\"type!=null\">"+
 				"and o.pay_status=#{type}"+

@@ -49,7 +49,7 @@ public interface YioUserMapper {
 	@Select("<script>" +
 			"SELECT id,username,(select sum(amount) from yio_account where user_id = u.id) as amount,(SELECT sum(stream) FROM yio_bill where user_id = u.id) as reward,work,status FROM yio_user u WHERE 1=1" +
 			"<if test=\"username!=null and username!=''\">"+
-				"and username=#{username}" +
+				"and username like \"%\"#{username}\"%\"" +
 			"</if>" +
 			"<if test=\"work!=null\">"+
 				"and work = #{work}"+

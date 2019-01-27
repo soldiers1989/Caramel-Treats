@@ -68,10 +68,10 @@ public interface YioAccountDetailMapper {
 				"and detail.createdAt between #{start} and #{end} " +
 			"</if>" +
 			"<if test=\"orderNo!=null and orderNo!=''\">"+
-			"and detail.orderNo = #{orderNo}"+
+			"and detail.orderNo like \"%\"#{orderNo}\"%\""+
 			"</if>"+
 			"<if test=\"serverNo!=null and serverNo!=''\">"+
-			"and detail.serverNo = #{serverNo}"+
+			"and detail.serverNo like \"%\"#{serverNo}\"%\""+
 			"</if>"+
 			"<if test=\"type!=null\">"+
 			"and detail.type = #{type}"+

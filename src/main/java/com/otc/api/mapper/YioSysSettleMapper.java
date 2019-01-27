@@ -42,6 +42,7 @@ public interface YioSysSettleMapper {
 			"<if test=\"status!=null\">"+
 				"and status = #{status} " +
 			"</if>" +
+			" order by status "+
 			"</script>")
 	List<YioSysSettle> queryByStatus(@Param("status") Integer status);
 

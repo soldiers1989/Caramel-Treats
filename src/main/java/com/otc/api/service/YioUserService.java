@@ -76,6 +76,7 @@ public class YioUserService {
 		YioUser user = yioUserMapper.findById(id);
 		if (user.getStatus().equals(1)){
 			user.setStatus(2);
+			user.setWork(2);
 		}else {
 			user.setStatus(1);
 		}

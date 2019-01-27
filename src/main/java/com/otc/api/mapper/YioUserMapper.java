@@ -40,7 +40,7 @@ public interface YioUserMapper {
 	@Update("update yio_user set username=#{username},password=#{password},last_login=#{lastLogin},createdAt=#{createdAt},updatedAt=#{updatedAt},token=#{token},phone=#{phone},tradingPwd=#{tradingPwd},authority=#{authority},work=#{work},invite=#{invite},inviter=#{inviter} where id=#{id}")
 	int update(YioUser yioUser);
 
-	@Update("update yio_user set status=#{status} where id=#{id}")
+	@Update("update yio_user set status=#{status},work = #{work} where id=#{id}")
 	int updateStatus(YioUser yioUser);
 
 	@Delete("delete from yio_user where id=#{id}")

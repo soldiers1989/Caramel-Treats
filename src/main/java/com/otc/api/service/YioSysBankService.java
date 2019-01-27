@@ -24,10 +24,13 @@ public class YioSysBankService {
 	}
 
 	public void create(YioSysBank yioSysBank){
+		yioSysBank.setStatus(2);
 		yioSysBankMapper.insert(yioSysBank);
 	}
 
 	public void update(YioSysBank yioSysBank){
+		YioSysBank bank = yioSysBankMapper.findById(yioSysBank.getId());
+		yioSysBank.setStatus(bank.getStatus());
 		yioSysBankMapper.update(yioSysBank);
 	}
 

@@ -47,7 +47,7 @@ public interface YioUserMapper {
 	int delete(YioUser yioUser);
 
 	@Select("<script>" +
-			"SELECT id,username,(select sum(amount) from yio_account where user_id = u.id) as amount,(SELECT sum(stream) FROM yio_bill where user_id = u.id) as reward,work,status FROM yio_user u WHERE 1=1" +
+			"SELECT id,username,(select name from yio_seller where user_id = u.id limit 1) as name ,(select sum(amount) from yio_account where user_id = u.id) as amount,(SELECT sum(stream) FROM yio_bill where user_id = u.id) as reward,work,status FROM yio_user u WHERE 1=1" +
 			"<if test=\"username!=null and username!=''\">"+
 				"and username like \"%\"#{username}\"%\"" +
 			"</if>" +

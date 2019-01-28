@@ -71,7 +71,11 @@ public class TokenAspect {
 						}
 						shop.setAuthority(user.getAuthority());
 						request.setAttribute("user",shop);
-					}else{
+						request.setAttribute("token",uuid);
+					}else if (user.getAuthority().equals(3) || user.getAuthority().equals(4)){
+						request.setAttribute("user",user);
+						request.setAttribute("token",uuid);
+					}else {
 						return g.toJson(new ApiResult(40002));
 					}
 				}
@@ -94,6 +98,7 @@ public class TokenAspect {
 						}
 						shop.setAuthority(user.getAuthority());
 						request.setAttribute("user",shop);
+						request.setAttribute("token",uuid);
 					}else{
 						return g.toJson(new ApiResult(40002));
 					}
@@ -114,6 +119,7 @@ public class TokenAspect {
 						return g.toJson(new ApiResult(40002));
 					}else{
 						request.setAttribute("user",user);
+						request.setAttribute("token",uuid);
 					}
 
 				}

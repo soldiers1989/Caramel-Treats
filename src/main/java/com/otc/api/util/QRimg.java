@@ -41,12 +41,12 @@ public class QRimg {
         System.out.println(res.toString(2));
         Gson gson = new Gson();
         QRPoJo q = gson.fromJson(res.toString(2), QRPoJo.class);
-        try {
-            new BigDecimal(q.getWords_result().get(1).getWords());
-        }catch (Exception e){
-            return q.getWords_result().get(1).getWords().substring(1,q.getWords_result().get(1).getWords().length());
-        }finally {
+
+        Boolean b = StringUtils.isBigDecimal(q.getWords_result().get(1).getWords());
+        if (b){
             return q.getWords_result().get(1).getWords();
+        }else {
+            return q.getWords_result().get(1).getWords().substring(1,q.getWords_result().get(1).getWords().length());
         }
     }
 

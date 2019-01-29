@@ -1,6 +1,7 @@
 package com.otc.api.service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.otc.api.pojo.qr.QRCreate;
@@ -32,7 +33,13 @@ public class YioQrService {
 	}
 
 	public List<YioQr> qrs(Integer id){
-		return yioQrMapper.findAllByUserId(id);
+		List<YioQr> qrs = new ArrayList<>();
+		List<YioQr> list = yioQrMapper.findAllByUserId(id);
+		for (YioQr qr :list){
+			qr.setFileUrl(URL+qr.getFileUrl());
+			qrs.add(qr);
+		}
+		return qrs;
 	}
 
 	public void delete(Integer id){

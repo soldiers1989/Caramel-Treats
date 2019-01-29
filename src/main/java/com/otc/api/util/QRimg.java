@@ -4,6 +4,8 @@ import com.baidu.aip.ocr.AipOcr;
 import com.google.gson.Gson;
 import com.otc.api.pojo.qr.QRPoJo;
 import org.json.JSONObject;
+
+import java.math.BigDecimal;
 import java.util.HashMap;
 
 public class QRimg {
@@ -39,7 +41,13 @@ public class QRimg {
         System.out.println(res.toString(2));
         Gson gson = new Gson();
         QRPoJo q = gson.fromJson(res.toString(2), QRPoJo.class);
-        return q.getWords_result().get(1).getWords().substring(1,q.getWords_result().get(1).getWords().length());
+        try {
+            new BigDecimal(q.getWords_result().get(1).getWords());
+        }catch (Exception e){
+            return q.getWords_result().get(1).getWords().substring(1,q.getWords_result().get(1).getWords().length());
+        }finally {
+            return q.getWords_result().get(1).getWords();
+        }
     }
 
 }

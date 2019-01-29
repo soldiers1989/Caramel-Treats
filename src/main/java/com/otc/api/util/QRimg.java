@@ -39,7 +39,7 @@ public class QRimg {
         System.out.println(res.toString(2));
         Gson gson = new Gson();
         QRPoJo q = gson.fromJson(res.toString(2), QRPoJo.class);
-        return q.getWords_result().get(1).getWords().substring(1,q.getWords_result().get(1).getWords().length());
+        return q.getWords_result().get(1).getWords();
     }
 
 }

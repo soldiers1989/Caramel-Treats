@@ -39,6 +39,6 @@ public class BASE64 {
 	    // 加密
 	    Encoder encoder = Base64.getEncoder();
         String encode = encoder.encodeToString(data);
-	    return encode.replace("+", "%2B");
+	    return encode;
 	}
 }

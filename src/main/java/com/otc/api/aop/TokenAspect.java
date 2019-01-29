@@ -126,6 +126,20 @@ public class TokenAspect {
 			}
 		}
 
+		if (method.getAnnotation(TokenAll.class) != null && method.getAnnotation(TokenAll.class).value()) {
+			if (StringUtils.isBlank(uuid)) {
+				return g.toJson(new ApiResult(40001));
+			}else {
+				YioSysUser user = yioSysUserMapper.findAllByToken(uuid);
+				if (user==null){
+					return g.toJson(new ApiResult(40002));
+				}else {
+					request.setAttribute("user",user);
+					request.setAttribute("token",uuid);
+				}
+			}
+		}
+
 		Object result = pjp.proceed();
 		
 		if(result instanceof PageInfo){

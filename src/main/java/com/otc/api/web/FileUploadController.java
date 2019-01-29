@@ -1,6 +1,7 @@
 package com.otc.api.web;
 
 import com.otc.api.aop.Token;
+import com.otc.api.aop.TokenAll;
 import com.otc.api.aop.TokenFinance;
 import com.otc.api.domain.YioFile;
 import com.otc.api.domain.YioSysUser;
@@ -30,7 +31,7 @@ public class FileUploadController {
     @Autowired
     private YioFileMapper fileMapper;
 
-    @TokenFinance
+    @TokenAll
     @ApiOperation(value = "文件上传", notes = "" ,response=Integer.class)
     @RequestMapping(method = RequestMethod.POST,produces = "application/json")
     public Object list(@RequestParam(value = "file", required = false) MultipartFile file,

@@ -42,7 +42,7 @@ public class YioQrController {
 
 	@TokenAdmin
 	@ApiOperation(value = "创建定额收款码", notes = "" ,response=YioQr.class)
-	@RequestMapping(value = "/delete",method = RequestMethod.DELETE,produces = "application/json")
+	@RequestMapping(value = "/delete/{id}",method = RequestMethod.DELETE,produces = "application/json")
 	public Object delete(@PathVariable("id") Integer id,HttpServletRequest request) throws MyException {
 		yioQrService.delete(id);
 		return null;

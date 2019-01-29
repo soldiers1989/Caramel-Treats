@@ -17,6 +17,9 @@ public class YioQrService {
 	@Autowired
 	private YioQrMapper yioQrMapper;
 
+	@Value("${FILE_UPLOAD_URL}")
+	private String FILE_UPLOAD_URL;
+
 	@Value("${URL}")
 	private String URL;
 
@@ -25,7 +28,7 @@ public class YioQrService {
 			YioQr qr = new YioQr();
 			qr.setStatus(2);
 			qr.setType(2);
-			qr.setAmount(new BigDecimal(QRimg.sample(URL+u)));
+			qr.setAmount(new BigDecimal(QRimg.sample(FILE_UPLOAD_URL+u)));
 			qr.setUserId(create.getId());
 			qr.setFileUrl(u);
 			yioQrMapper.insert(qr);

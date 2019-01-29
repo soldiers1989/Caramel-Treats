@@ -35,7 +35,7 @@ public class QRimg {
         options.put("detect_language", "true");
         options.put("probability", "true");
         // 通用文字识别, 图片参数为远程url图片
-        JSONObject res = client.basicGeneralUrl(url, options);
+        JSONObject res = client.basicGeneral(url, options);
         System.out.println(res.toString(2));
         Gson gson = new Gson();
         QRPoJo q = gson.fromJson(res.toString(2), QRPoJo.class);

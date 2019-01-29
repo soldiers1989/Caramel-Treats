@@ -42,10 +42,4 @@ public class QRimg {
         return q.getWords_result().get(1).getWords().substring(1,q.getWords_result().get(1).getWords().length());
     }
 
-
-    public static void main(String[] args) {
-        String[] s = new String[]{"2","3"};
-        Gson gson = new Gson();
-        System.out.println(gson.toJson(s));
-    }
 }

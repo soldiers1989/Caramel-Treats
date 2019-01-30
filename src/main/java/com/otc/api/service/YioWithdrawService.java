@@ -9,6 +9,7 @@ import com.otc.api.domain.YioShop;
 import com.otc.api.mapper.YioShopMapper;
 import com.otc.api.pojo.order.OrderList;
 import com.otc.api.pojo.order.OrderReport;
+import com.otc.api.pojo.order.OrderWithdrawList;
 import com.otc.api.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,7 +60,7 @@ public class YioWithdrawService {
 		return report;
 	}
 
-	public PageInfo<OrderList> list(Integer id, YioShop shop, Date start, Date end, Integer type, String orderNo, String serverNo, String userName, Integer status, Integer page, Integer size){
+	public PageInfo<OrderWithdrawList> list(Integer id, YioShop shop, Date start, Date end, Integer type, String orderNo, String serverNo, String userName, Integer status, Integer page, Integer size){
 		if (shop.getAuthority().equals(1)){
 			if (id == 0){
 				shop = yioShopMapper.findAll().get(0);
@@ -89,8 +90,8 @@ public class YioWithdrawService {
 			status = null;
 		}
 		PageHelper.startPage(page,size);
-		List<OrderList> orderLists = yioWithdrawMapper.query(status,shop.getAppId(),start,end,orderNo,serverNo,userName);
-		PageInfo<OrderList> info = new PageInfo<>(orderLists);
+		List<OrderWithdrawList> orderLists = yioWithdrawMapper.query(status,shop.getAppId(),start,end,orderNo,serverNo,userName);
+		PageInfo<OrderWithdrawList> info = new PageInfo<>(orderLists);
 		return info;
 	}
 }

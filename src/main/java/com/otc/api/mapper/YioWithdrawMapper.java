@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.otc.api.pojo.order.OrderList;
+import com.otc.api.pojo.order.OrderWithdrawList;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -147,6 +148,6 @@ public interface YioWithdrawMapper {
 			"</if>"+
 			" order by o.id desc"+
 			"</script>")
-	List<OrderList> query(@Param("type") Integer type, @Param("appId") String appId, @Param("start") Date start, @Param("end") Date end, @Param("orderId") String orderId, @Param("orderNo") String orderNo, @Param("username") String username);
+	List<OrderWithdrawList> query(@Param("type") Integer type, @Param("appId") String appId, @Param("start") Date start, @Param("end") Date end, @Param("orderId") String orderId, @Param("orderNo") String orderNo, @Param("username") String username);
 
 }

@@ -5,7 +5,7 @@ import com.otc.api.util.DateUtils;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class OrderList {
+public class OrderWithdrawList {
     private Integer id;
     private Date createdAt;
     private String createDate;//
@@ -41,7 +41,7 @@ public class OrderList {
     }
 
     public String getCreateDate() {
-        return DateUtils.getDateFromString4(createdAt);
+        return DateUtils.getDateFromString(createdAt);
     }
 
     public void setCreateDate(String createDate) {

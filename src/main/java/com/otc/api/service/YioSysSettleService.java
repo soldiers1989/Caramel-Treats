@@ -91,7 +91,7 @@ public class YioSysSettleService {
 		yioSysSettleMapper.update(sysSettle);
 		YioSysSettleFile file = yioSysSettleFileMapper.findById(yioSysSettle.getSettleId());
 		file.setAmount(sysSettle.getAmount());
-		file.setInFileUrl(yioSysSettle.getInFileUrl());
+		//file.setInFileUrl(yioSysSettle.getInFileUrl());
 		yioSysSettleFileMapper.update(file);
 		//解冻结账
 		List<YioAccount> accounts = yioAccountMapper.findAllByUserId(sysSettle.getUserId());

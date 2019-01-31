@@ -24,6 +24,7 @@ public class YioAccountDetailService {
 	private YioShopMapper yioShopMapper;
 
 	public PageInfo<DetailPoJo> list(Integer page, Integer size, YioShop shop, String orderNo, String serverNo, Date start,Date end,Integer type) {
+		shop = yioShopMapper.findById(shop.getId());
 		PageHelper.startPage(page,size);
 		List<DetailPoJo> detailPoJos = yioAccountDetailMapper.query(shop.getAppId(),orderNo,serverNo,start,end,type);
 		PageInfo<DetailPoJo> info = new PageInfo<>(detailPoJos);
@@ -31,6 +32,7 @@ public class YioAccountDetailService {
 	}
 
 	public DetailReport report(YioShop shop, String orderNo, String serverNo, Date start, Date end, Integer type) {
+		shop = yioShopMapper.findById(shop.getId());
 		DetailReport report = new DetailReport();
 		report.setInTotal(yioAccountDetailMapper.querySum(shop.getAppId(),orderNo,serverNo,start,end));
 		report.setInCount(yioAccountDetailMapper.queryCount(shop.getAppId(),orderNo,serverNo,start,end));

@@ -44,7 +44,7 @@ public class YioOrdersService {
 				shop = yioShopMapper.findById(id);
 			}
 		}else {
-			shop = yioShopMapper.findById(id);
+			shop = yioShopMapper.findById(shop.getId());
 		}
 		Index index = new Index();
 		index.setTodayBalance(yioOrdersMapper.sumByDate(shop.getAppId(),DateUtils.startDate(new Date()),"已支付"));
@@ -85,7 +85,7 @@ public class YioOrdersService {
 				shop = yioShopMapper.findById(id);
 			}
 		}else {
-			shop = yioShopMapper.findById(id);
+			shop = yioShopMapper.findById(shop.getId());
 		}
 		if (type.equals(1)){
 			start = DateUtils.getStartDay(DateUtils.startDate(new Date()));
@@ -120,7 +120,7 @@ public class YioOrdersService {
 				shop = yioShopMapper.findById(id);
 			}
 		}else {
-			shop = yioShopMapper.findById(id);
+			shop = yioShopMapper.findById(shop.getId());
 		}
 		if (type.equals(1)){
 			start = DateUtils.getStartDay(DateUtils.startDate(new Date()));

@@ -33,7 +33,7 @@ public class YioWithdrawService {
 				shop = yioShopMapper.findById(id);
 			}
 		}else {
-			shop = yioShopMapper.findById(id);
+			shop = yioShopMapper.findById(shop.getId());
 		}
 		if (type.equals(1)){
 			start = DateUtils.getStartDay(DateUtils.startDate(new Date()));
@@ -68,7 +68,7 @@ public class YioWithdrawService {
 				shop = yioShopMapper.findById(id);
 			}
 		}else {
-			shop = yioShopMapper.findById(id);
+			shop = yioShopMapper.findById(shop.getId());
 		}
 		if (type.equals(1)){
 			start = DateUtils.getStartDay(DateUtils.startDate(new Date()));

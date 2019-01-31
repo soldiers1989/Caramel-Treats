@@ -43,6 +43,6 @@ public interface YioQrMapper {
 	int delete(YioQr yioQr);
 
 	@Results({ @Result(property = "id", column = "id"),@Result(property = "amount", column = "amount"),@Result(property = "sellerId", column = "seller_id"),@Result(property = "userId", column = "user_id"),@Result(property = "status", column = "status"),@Result(property = "fileUrl", column = "file_url"),@Result(property = "type", column = "type")})
-	@Select("SELECT * FROM yio_qr where user_id = #{userId}")
+	@Select("SELECT * FROM yio_qr where user_id = #{userId} order by amount asc")
 	List<YioQr> findAllByUserId(@Param("userId") Integer userId);
 }

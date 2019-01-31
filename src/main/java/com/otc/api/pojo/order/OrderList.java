@@ -14,6 +14,7 @@ public class OrderList {
     private BigDecimal orderPrice;//
     private BigDecimal payPrice;//
     private String username;
+    private String name;
     private Integer type;//1:未到帐 2:已到帐 3:已过期 4:部帐 5:清算
 
     public String getUsername() {
@@ -85,5 +86,13 @@ public class OrderList {
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

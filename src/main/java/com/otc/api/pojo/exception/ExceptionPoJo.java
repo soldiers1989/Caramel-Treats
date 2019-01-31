@@ -11,8 +11,12 @@ public class ExceptionPoJo {
     private String username;
     private String payName;
     private BigDecimal amount;
+    private String name;//姓名
+    private Integer type;//1支付宝 2微信
     private Date createdAt;
     private String createDate;
+    private Integer status;//1:未处理  2已处理
+
 
     public Integer getId() {
         return id;
@@ -60,5 +64,29 @@ public class ExceptionPoJo {
 
     public void setCreateDate(String createDate) {
         this.createDate = createDate;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

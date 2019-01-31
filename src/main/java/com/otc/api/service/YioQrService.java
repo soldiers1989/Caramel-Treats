@@ -45,7 +45,15 @@ public class YioQrService {
 		return qrs;
 	}
 
+	public Integer showStatus(Integer id){
+		return yioQrMapper.findAllByStatusAndUserId(id,2).size();
+	}
+
 	public void delete(Integer id){
 		yioQrMapper.delete(yioQrMapper.findById(id));
+	}
+
+	public void updateStatus(Integer id){
+		yioQrMapper.updateStatus(id,1);
 	}
 }

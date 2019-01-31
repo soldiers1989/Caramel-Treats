@@ -16,10 +16,16 @@ public class YioExceptionOrdersService {
 	@Autowired
 	private YioExceptionOrdersMapper yioExceptionOrdersMapper;
 
-	public PageInfo<ExceptionPoJo> getAll(Date start,Date end,String username, Integer page, Integer size) {
+	public PageInfo<ExceptionPoJo> getAll(Date start,Date end,String username, Integer status, Integer page, Integer size) {
 		PageHelper.startPage(page,size);
-		List<ExceptionPoJo> list = yioExceptionOrdersMapper.queryAllException(start,end,username);
+		List<ExceptionPoJo> list = yioExceptionOrdersMapper.queryAllException(start,end,username,status);
 		PageInfo<ExceptionPoJo> info = new PageInfo<>(list);
 		return info;
+	}
+
+	public void updateEnter(Integer id){
+		YioExceptionOrders orders = yioExceptionOrdersMapper.findById(id);
+		orders.setStatus(2);
+		yioExceptionOrdersMapper.updateStatus(orders);
 	}
 }

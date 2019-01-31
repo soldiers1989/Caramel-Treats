@@ -34,17 +34,24 @@ public interface YioExceptionOrdersMapper {
 	@Update("update yio_exception_orders set seller_id=#{sellerId},user_id=#{userId},createdAt=#{createdAt},amount=#{amount} where id=#{id}")
 	int update(YioExceptionOrders yioExceptionOrders);
 
+	@Update("update yio_exception_orders set status=#{status} where id=#{id}")
+	int updateStatus(YioExceptionOrders yioExceptionOrders);
+
 	@Delete("delete from yio_exception_orders where id=#{id}")
 	int delete(YioExceptionOrders yioExceptionOrders);
 
 	@Select("<script>" +
-			"SELECT e.id as id,e.amount as amount,u.username as username ,s.username as payName,e.createdAt as createdAt FROM yio_exception_orders e,yio_user u,yio_seller s where u.id = s.user_id and e.user_id = u.id and e.seller_id = s.id" +
+			"SELECT e.id as id,e.amount as amount,u.username as username ,s.username as payName,e.createdAt as createdAt,s.name as name,s.type as type,e.status as status FROM yio_exception_orders e,yio_user u,yio_seller s where u.id = s.user_id and e.user_id = u.id and e.seller_id = s.id" +
 			"<if test=\"start!=null\">"+
 				"and e.createdAt between #{start} and #{end} " +
 			"</if>" +
 			"<if test=\"username!=null and username!=null\">"+
-				"and u.username = #{username}"+
+				"and u.username like \"%\"#{username}\"%\""+
 			"</if>"+
+			"<if test=\"status!=null\">"+
+				"and e.status = #{status}"+
+			"</if>"+
+			" order by id desc"+
 			"</script>")
-	List<ExceptionPoJo> queryAllException(@Param("start") Date start,@Param("end") Date end,@Param("username") String username);
+	List<ExceptionPoJo> queryAllException(@Param("start") Date start,@Param("end") Date end,@Param("username") String username,@Param("status") Integer status);
 }

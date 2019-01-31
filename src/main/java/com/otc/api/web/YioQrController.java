@@ -41,10 +41,25 @@ public class YioQrController {
 	}
 
 	@TokenAdmin
-	@ApiOperation(value = "创建定额收款码", notes = "" ,response=YioQr.class)
+	@ApiOperation(value = "删除定额收款码", notes = "" ,response=YioQr.class)
 	@RequestMapping(value = "/delete/{id}",method = RequestMethod.DELETE,produces = "application/json")
 	public Object delete(@PathVariable("id") Integer id,HttpServletRequest request) throws MyException {
 		yioQrService.delete(id);
+		return null;
+	}
+
+	@TokenAdmin
+	@ApiOperation(value = "删除定额收款码", notes = "" ,response=YioQr.class)
+	@RequestMapping(value = "/showStatus/{id}",method = RequestMethod.GET,produces = "application/json")
+	public Object showStatus(@PathVariable("id") Integer id,HttpServletRequest request) throws MyException {
+		return yioQrService.showStatus(id);
+	}
+
+	@TokenAdmin
+	@ApiOperation(value = "根据用户ID 审核qr", notes = "" ,response=YioQr.class)
+	@RequestMapping(value = "/updateStatus/{id}",method = RequestMethod.PUT,produces = "application/json")
+	public Object updateStatus(@PathVariable("id") Integer id,HttpServletRequest request) throws MyException {
+		yioQrService.updateStatus(id);
 		return null;
 	}
 }

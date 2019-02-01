@@ -34,6 +34,13 @@ public class DateUtils {
 		}
 	}
 
+	public static String getDateFromString5(Date date) {
+		SimpleDateFormat simple = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String newDate = simple.format(date);
+		return newDate;
+	}
+
+
 	public static String getDateFromString(Date date) {
 		SimpleDateFormat simple = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		simple.setTimeZone(TimeZone.getTimeZone("GMT+8"));

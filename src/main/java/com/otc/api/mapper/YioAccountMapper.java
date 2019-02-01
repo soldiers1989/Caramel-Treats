@@ -38,4 +38,8 @@ public interface YioAccountMapper {
 	@Results({ @Result(property = "id", column = "id"),@Result(property = "amount", column = "amount"),@Result(property = "sellerId", column = "seller_id"),@Result(property = "userId", column = "user_id"),@Result(property = "totalStream", column = "total_stream"),@Result(property = "createAt", column = "createAt"),@Result(property = "updateAt", column = "updateAt"),@Result(property = "version", column = "version"),@Result(property = "token", column = "token"),@Result(property = "frozen", column = "frozen")})
 	@Select("SELECT * FROM yio_account where user_id = #{userId}")
 	List<YioAccount> findAllByUserId(@Param("userId") Integer userId);
+
+	@Results({ @Result(property = "id", column = "id"),@Result(property = "amount", column = "amount"),@Result(property = "sellerId", column = "seller_id"),@Result(property = "userId", column = "user_id"),@Result(property = "totalStream", column = "total_stream"),@Result(property = "createAt", column = "createAt"),@Result(property = "updateAt", column = "updateAt"),@Result(property = "version", column = "version"),@Result(property = "token", column = "token")})
+	@Select("SELECT * FROM yio_account WHERE seller_id = #{sellerId}")
+	YioAccount findBySellerId(@Param("sellerId") Integer sellerId);
 }

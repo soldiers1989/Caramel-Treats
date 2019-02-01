@@ -1,5 +1,6 @@
 package com.otc.api.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 public class YioShop {
 
@@ -23,6 +24,8 @@ public class YioShop {
 	private Integer authority;
 	//
 	private String token;
+
+	private BigDecimal rate;
 
 	public void setId(Integer id){
 		this.id=id;
@@ -104,4 +107,11 @@ public class YioShop {
 		return token;
 	}
 
+	public BigDecimal getRate() {
+		return rate;
+	}
+
+	public void setRate(BigDecimal rate) {
+		this.rate = rate;
+	}
 }

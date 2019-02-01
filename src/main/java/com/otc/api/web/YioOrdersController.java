@@ -5,10 +5,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import com.alipay.api.AlipayApiException;
 import com.otc.api.aop.Token;
 import com.otc.api.aop.TokenAdmin;
 import com.otc.api.domain.YioSeller;
 import com.otc.api.domain.YioShop;
+import com.otc.api.domain.YioUser;
 import io.swagger.annotations.Api;
 
 import io.swagger.annotations.ApiOperation;
@@ -72,4 +74,12 @@ public class YioOrdersController {
 		return yioOrdersService.list(id,user,start,end,type,orderNo,serverNo,userName,status,pageNo,sizeNo);
 	}
 
+	@TokenAdmin
+	@ApiOperation(value = "修改已付款", notes = "" ,response=YioOrders.class)
+	@RequestMapping(value="/updatePay/{orderNo}/{passWord}",method = RequestMethod.PUT,produces = "application/json")
+	public Object updatePay(@PathVariable("orderNo") String orderNo,@PathVariable("passWord") String passWord, HttpServletRequest request) throws MyException, AlipayApiException {
+		YioUser user=(YioUser)request.getAttribute("user");
+		yioOrdersService.updatePay(orderNo,passWord,user);
+		return null;
+	}
 }

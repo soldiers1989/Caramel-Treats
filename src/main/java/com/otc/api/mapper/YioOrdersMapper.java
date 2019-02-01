@@ -26,6 +26,10 @@ public interface YioOrdersMapper {
 	YioOrders findById(@Param("id") Integer id);
 
 	@Results({ @Result(property = "id", column = "id"),@Result(property = "orderId", column = "order_id"),@Result(property = "orderPrice", column = "order_price"),@Result(property = "payPrice", column = "pay_price"),@Result(property = "payStatus", column = "pay_status"),@Result(property = "payType", column = "pay_type"),@Result(property = "payFormat", column = "pay_format"),@Result(property = "payQr", column = "pay_qr"),@Result(property = "redirectUrl", column = "redirect_url"),@Result(property = "extension", column = "extension"),@Result(property = "createdAt", column = "createdAt"),@Result(property = "updatedAt", column = "updatedAt"),@Result(property = "deletedAt", column = "deletedAt"),@Result(property = "sellerId", column = "seller_id"),@Result(property = "userId", column = "user_id"),@Result(property = "type", column = "type")})
+	@Select("SELECT * FROM yio_orders WHERE extension = #{extension}")
+	YioOrders findByExtension(@Param("extension") String extension);
+
+	@Results({ @Result(property = "id", column = "id"),@Result(property = "orderId", column = "order_id"),@Result(property = "orderPrice", column = "order_price"),@Result(property = "payPrice", column = "pay_price"),@Result(property = "payStatus", column = "pay_status"),@Result(property = "payType", column = "pay_type"),@Result(property = "payFormat", column = "pay_format"),@Result(property = "payQr", column = "pay_qr"),@Result(property = "redirectUrl", column = "redirect_url"),@Result(property = "extension", column = "extension"),@Result(property = "createdAt", column = "createdAt"),@Result(property = "updatedAt", column = "updatedAt"),@Result(property = "deletedAt", column = "deletedAt"),@Result(property = "sellerId", column = "seller_id"),@Result(property = "userId", column = "user_id"),@Result(property = "type", column = "type")})
 	@Select("SELECT * FROM yio_orders")
 	List<YioOrders> findAll();
 

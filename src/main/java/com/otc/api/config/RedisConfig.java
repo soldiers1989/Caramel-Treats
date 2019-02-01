@@ -1,55 +1,54 @@
 package com.otc.api.config;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CachingConfigurerSupport;
-import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.interceptor.KeyGenerator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.cache.RedisCacheManager;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
-
-import java.lang.reflect.Method;
+import org.springframework.context.annotation.PropertySource;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 @Configuration
-@EnableCaching
-public class RedisConfig extends CachingConfigurerSupport {
-	@Bean
-    public KeyGenerator keyGenerator() {
-        return new KeyGenerator() {
-            @Override
-            public Object generate(Object target, Method method, Object... params) {
-                StringBuilder sb = new StringBuilder();
-                sb.append(target.getClass().getName());
-                sb.append(method.getName());
-                for (Object obj : params) {
-                    sb.append(obj.toString());
-                }
-                return sb.toString();
-            }
-        };
-    }
+@PropertySource("classpath:application.properties")
+public class RedisConfig {
+
+    @Value("${spring.redis.host}")
+    private String host;
+
+    @Value("${spring.redis.port}")
+    private int port;
+
+    @Value("${spring.redis.timeout}")
+    private int timeout;
+
+    @Value("${spring.redis.jedis.pool.max-idle}")
+    private int maxIdle;
+
+    @Value("${spring.redis.jedis.pool.max-wait}")
+    private long maxWaitMillis;
+
+    @Value("${spring.redis.password}")
+    private String password;
+
+    @Value("${spring.redis.block-when-exhausted}")
+    private boolean  blockWhenExhausted;
+
+    @Value("${spring.redis.database}")
+    private Integer database;
+
     @Bean
-    public CacheManager cacheManager(RedisTemplate redisTemplate) {
-        RedisCacheManager rcm = new RedisCacheManager(redisTemplate);
-        return rcm;
+    public JedisPool redisPoolFactory()  throws Exception{
+        JedisPoolConfig config = new JedisPoolConfig();
+        //设置最大实例数
+        config.setMaxTotal(1000);
+        //配置资源池最大闲置数
+        config.setMaxIdle(200);
+        //等待可用连接的最大时间
+        config.setMaxWaitMillis(10000);
+        //在borrow一个jedis实例时，是否提前进行validate操作；如果为true，则得到的jedis实例均是可用的
+        config.setTestOnBorrow(true);
+        JedisPool jedisPool = new JedisPool(host, port);
+        return jedisPool;
     }
-    @Bean
-    public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory factory) {
-        StringRedisTemplate template = new StringRedisTemplate(factory);
-        Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
-        ObjectMapper om = new ObjectMapper();
-        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
-        jackson2JsonRedisSerializer.setObjectMapper(om);
-        template.setValueSerializer(jackson2JsonRedisSerializer);
-        template.afterPropertiesSet();
-        return template;
-    }
+
 }
+

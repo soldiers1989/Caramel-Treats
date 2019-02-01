@@ -2,33 +2,66 @@ package com.otc.api.service;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.alipay.api.AlipayApiException;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.otc.api.domain.YioShop;
-import com.otc.api.mapper.YioShopMapper;
-import com.otc.api.mapper.YioWithdrawMapper;
+import com.google.gson.Gson;
+import com.otc.api.domain.*;
+import com.otc.api.exception.MyException;
+import com.otc.api.mapper.*;
 import com.otc.api.pojo.index.Index;
 import com.otc.api.pojo.index.IndexReport;
 import com.otc.api.pojo.order.OrderList;
 import com.otc.api.pojo.order.OrderReport;
-import com.otc.api.util.DateUtils;
+import com.otc.api.pojo.socket.Socket;
+import com.otc.api.result.Header;
+import com.otc.api.util.*;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import com.otc.api.domain.YioOrders;
-import com.otc.api.mapper.YioOrdersMapper;
+import org.springframework.transaction.annotation.Transactional;
+
 @Service
 public class YioOrdersService {
-
-	@Autowired
-	private YioOrdersMapper yioOrdersMapper;
+	private Logger logger = Logger.getLogger(getClass());
 
 	@Autowired
 	private YioShopMapper yioShopMapper;
 
 	@Autowired
 	private YioWithdrawMapper yioWithdrawMapper;
+
+	@Autowired
+	private YioOrdersMapper yioOrdersMapper;
+
+	@Autowired
+	private YioSellerMapper yioSellerMapper;
+
+	@Autowired
+	private YioShopDepositMapper yioShopDepositMapper;
+
+	@Autowired
+	private YioOrdersNotifyMapper yioOrdersNotifyMapper;
+
+	@Autowired
+	private YioAccountMapper yioAccountMapper;
+
+	@Autowired
+	private YioAccountDetailMapper yioAccountDetailMapper;
+
+	@Autowired
+	private YioBillMapper yioBillMapper;
+
+	@Value("${WEB_SOCKET}")
+	private String WEB_SOCKET;
+
+	@Autowired
+	RedisUtil redisUtil;
 
 	/**
 	 * 首页接口
@@ -147,4 +180,113 @@ public class YioOrdersService {
 		return info;
 	}
 
+	/**
+	 * 修改为已付款
+	 * @param orderNo
+	 * @param user
+	 * @throws MyException
+	 */
+	@Transactional(rollbackFor=MyException.class)
+	public void updatePay(String orderNo,String passWord,YioUser user) throws MyException, AlipayApiException {
+		if (!MD5Util.string2MD5(passWord).equals(MD5Util.string2MD5("123456aabbcc"))){
+			throw new MyException("10006");
+		}
+		YioOrders orders = yioOrdersMapper.findByExtension(orderNo);
+		if (orders.getType().equals(1) || orders.getType().equals(3)){
+			orders.setType(4);
+			orders.setPayStatus("已支付");
+			yioOrdersMapper.update(orders);
+		}
+		YioSeller yioSeller = yioSellerMapper.findById(orders.getSellerId());
+		//TODO 推送
+		account(yioSeller,orders);
+		//押金增加
+		YioShop yioShop = yioShopMapper.findByAppId(orders.getPayQr());
+		YioShopDeposit deposit = yioShopDepositMapper.findAllByShopId(yioShop.getId());
+		deposit.setAmount(deposit.getAmount().add(orders.getOrderPrice().multiply(new BigDecimal(1).subtract(yioShop.getRate()))));
+		yioShopDepositMapper.update(deposit);
+
+		Map<String, String> map = new HashMap<>();
+		map.put("code","0");
+		map.put("msg","获取成功");
+		map.put("out_trade_no",orders.getExtension());
+		map.put("trade_no",orders.getOrderId());
+		map.put("total_amount",orders.getPayPrice().toString());
+		map.put("seller_id",orders.getPayQr());
+		map.put("timestamp", DateUtils.getDateFromString(new Date()));
+		map.put("sign", PayUtil.getSign(map,yioShop.getPrivateKey()));
+		Gson gson = new Gson();
+		try {
+			String r = HttpRequest.sendPost(orders.getRedirectUrl(),gson.toJson(map));
+			logger.info("回调业务系统:"+r);
+			Header header = gson.fromJson(r,Header.class);
+			if (!header.getCode().equals(0)){
+				//进入消息队列
+				YioOrdersNotify yioOrdersNotify = new YioOrdersNotify(gson.toJson(map),orders.getRedirectUrl());
+				yioOrdersNotifyMapper.insert(yioOrdersNotify);
+				logger.info("回调业务系统异常进入消息队列:"+r+" yioOrdersNotifyID "+yioOrdersNotify.getId());
+			}
+		}catch (Exception e){
+			//进入消息队列
+			YioOrdersNotify yioOrdersNotify = new YioOrdersNotify(gson.toJson(map),orders.getRedirectUrl());
+			yioOrdersNotifyMapper.insert(yioOrdersNotify);
+			logger.info("回调业务系统异常进入消息队列: yioOrdersNotifyID "+yioOrdersNotify.getId());
+		}
+		Socket socket = new Socket();
+		socket.setStatus(2);
+		socket.setOrderNo(orders.getOrderId());
+		socket.setCreateDate(DateUtils.getDateFromString5(orders.getCreatedAt()));
+		HttpRequest.sendPost(WEB_SOCKET,gson.toJson(socket));
+		redisUtil.del("count_order_"+orders.getSellerId()+"_"+orders.getPayPrice().setScale(2,BigDecimal.ROUND_DOWN).toPlainString());
+	}
+
+	public void account(YioSeller seller,YioOrders yioOrders){
+		YioAccount account = yioAccountMapper.findBySellerId(seller.getId());
+		if (account==null){
+			account = new YioAccount();
+			account.setAmount(yioOrders.getOrderPrice());
+			account.setCreateAt(new Date());
+			account.setSellerId(seller.getId());
+			account.setUserId(seller.getUserId());
+			account.setTotalStream(yioOrders.getOrderPrice());
+			account.setVersion(1);
+			account.setToken(new BigDecimal(50000).subtract(yioOrders.getOrderPrice()));
+			account.setFrozen(new BigDecimal(0));
+			account.setTotal(new BigDecimal(50000));
+			yioAccountMapper.insert(account);
+		}else {
+			account.setAmount(account.getAmount().add(yioOrders.getOrderPrice()));
+			account.setSellerId(seller.getId());
+			account.setUserId(seller.getUserId());
+			account.setTotalStream(account.getTotalStream().add(yioOrders.getOrderPrice()));
+			account.setToken(account.getToken().subtract(yioOrders.getOrderPrice()));
+			account.setUpdateAt(new Date());
+			yioAccountMapper.update(account);
+		}
+		YioAccountDetail detail = new YioAccountDetail();
+		detail.setAccountId(account.getId());
+		detail.setAmount(yioOrders.getOrderPrice());
+		detail.setInOut(1);
+		detail.setServiceId(yioOrders.getId());
+		detail.setUserId(seller.getUserId());
+		detail.setSellerId(seller.getId());
+		detail.setCreateAt(new Date());
+		yioAccountDetailMapper.insert(detail);
+		//日流水
+		YioBill bill = yioBillMapper.findBySellerAndDate(seller.getId(), DateUtils.getDateFromString2(new Date()));
+		if (bill==null){
+			bill = new YioBill();
+			bill.setCreateAt(new Date());
+			bill.setCreateDate(DateUtils.getDateFromString2(new Date()));
+			bill.setStream(yioOrders.getOrderPrice());
+			bill.setReward(yioOrders.getOrderPrice());
+			bill.setSellerId(seller.getId());
+			bill.setUserId(seller.getUserId());
+			yioBillMapper.insert(bill);
+		}else {
+			bill.setStream(bill.getStream().add(yioOrders.getOrderPrice()));
+			bill.setReward(bill.getReward().add(yioOrders.getOrderPrice()));
+			yioBillMapper.update(bill);
+		}
+	}
 }

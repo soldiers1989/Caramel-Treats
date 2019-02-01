@@ -1,5 +1,6 @@
 package com.otc.api.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 public class YioAccountDetail {
 
@@ -8,7 +9,7 @@ public class YioAccountDetail {
 	//
 	private Integer accountId;
 	//
-	private double amount;
+	private BigDecimal amount;
 	//1:入 2:出
 	private Integer inOut;
 	//业务id
@@ -36,12 +37,12 @@ public class YioAccountDetail {
 		return accountId;
 	}
 
-	public void setAmount(double amount){
-		this.amount=amount;
+	public BigDecimal getAmount() {
+		return amount;
 	}
 
-	public double getAmount(){
-		return amount;
+	public void setAmount(BigDecimal amount) {
+		this.amount = amount;
 	}
 
 	public void setInOut(Integer inOut){

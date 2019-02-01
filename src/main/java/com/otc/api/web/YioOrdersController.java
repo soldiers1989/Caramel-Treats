@@ -11,6 +11,7 @@ import com.otc.api.aop.TokenAdmin;
 import com.otc.api.domain.YioSeller;
 import com.otc.api.domain.YioShop;
 import com.otc.api.domain.YioUser;
+import com.otc.api.pojo.order.UpdatePay;
 import io.swagger.annotations.Api;
 
 import io.swagger.annotations.ApiOperation;
@@ -76,10 +77,9 @@ public class YioOrdersController {
 
 	@TokenAdmin
 	@ApiOperation(value = "修改已付款", notes = "" ,response=YioOrders.class)
-	@RequestMapping(value="/updatePay/{orderNo}/{passWord}",method = RequestMethod.PUT,produces = "application/json")
-	public Object updatePay(@PathVariable("orderNo") String orderNo,@PathVariable("passWord") String passWord, HttpServletRequest request) throws MyException, AlipayApiException {
-		YioUser user=(YioUser)request.getAttribute("user");
-		yioOrdersService.updatePay(orderNo,passWord,user);
+	@RequestMapping(value="/updatePay",method = RequestMethod.PUT,produces = "application/json")
+	public Object updatePay(@RequestBody UpdatePay updatePay, HttpServletRequest request) throws MyException, AlipayApiException {
+		yioOrdersService.updatePay(updatePay.getOrderNo(),updatePay.getServerNo(),updatePay.getPassWord());
 		return null;
 	}
 }

@@ -183,15 +183,14 @@ public class YioOrdersService {
 	/**
 	 * 修改为已付款
 	 * @param orderNo
-	 * @param user
 	 * @throws MyException
 	 */
 	@Transactional(rollbackFor=MyException.class)
-	public void updatePay(String orderNo,String passWord,YioUser user) throws MyException, AlipayApiException {
+	public void updatePay(String orderNo,String serverNo,String passWord) throws MyException, AlipayApiException {
 		if (!MD5Util.string2MD5(passWord).equals(MD5Util.string2MD5("123456aabbcc"))){
 			throw new MyException("10006");
 		}
-		YioOrders orders = yioOrdersMapper.findByExtension(orderNo);
+		YioOrders orders = yioOrdersMapper.findByExtension(orderNo,serverNo);
 		if (orders.getType().equals(1) || orders.getType().equals(3)){
 			orders.setType(4);
 			orders.setPayStatus("已支付");

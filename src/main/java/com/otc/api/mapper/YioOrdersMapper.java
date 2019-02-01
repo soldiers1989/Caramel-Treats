@@ -169,7 +169,7 @@ public interface YioOrdersMapper {
 	BigDecimal querySumPayPrice(@Param("appId") String appId,@Param("start") Date start,@Param("end") Date end,@Param("orderId") String orderId,@Param("orderNo") String orderNo,@Param("username") String username);
 
 	@Select("<script>" +
-			"select *,u.username as username ,(select name from yio_seller s where s.user_id = u.id limit 1) as name from yio_orders o,yio_user u where u.id = o.user_id and o.pay_qr=#{appId}" +
+			"select o.*,u.username as username ,(select name from yio_seller s where s.user_id = u.id limit 1) as name from yio_orders o,yio_user u where u.id = o.user_id and o.pay_qr=#{appId}" +
 			"<if test=\"start!=null\">"+
 				"and o.createdAt between #{start} and #{end} " +
 			"</if>" +

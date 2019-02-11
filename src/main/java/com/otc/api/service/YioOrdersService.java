@@ -80,7 +80,16 @@ public class YioOrdersService {
 			shop = yioShopMapper.findById(shop.getId());
 		}
 		Index index = new Index();
-		index.setTodayBalance(yioOrdersMapper.sumByDate(shop.getAppId(),DateUtils.startDate(new Date()),"已支付"));
+		BigDecimal orderBalance = yioOrdersMapper.sum(shop.getAppId(),"已支付");
+		BigDecimal balance = new BigDecimal(0);
+		if (orderBalance!=null){
+			balance = orderBalance.multiply(shop.getRate());
+			balance = orderBalance.subtract(balance);
+			Integer count = yioWithdrawMapper.countByAppId(shop.getAppId());
+			balance = balance.subtract(new BigDecimal(count*3));
+
+		}
+		index.setTodayBalance(balance);
 		index.setTodayCount(yioOrdersMapper.countByCreateDate(shop.getAppId(),DateUtils.startDate(new Date())));
 		index.setWithdraw(yioWithdrawMapper.sumByStatus(shop.getAppId(),1));
 		index.setWithdrawCount(yioWithdrawMapper.countByStatus(shop.getAppId(),1));

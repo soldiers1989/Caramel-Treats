@@ -48,6 +48,9 @@ public interface YioWithdrawMapper {
 	@Select("SELECT count(id) FROM yio_withdraw where app_id =#{appId} and pay_status = #{payStatus}")
 	Integer countByStatus(@Param("appId") String appId, @Param("payStatus") Integer payStatus);
 
+	@Select("SELECT count(id) FROM yio_withdraw where app_id =#{appId}")
+	Integer countByAppId(@Param("appId") String appId);
+
 	@Select("SELECT sum(amount) FROM yio_withdraw where app_id =#{appId} and pay_status = #{payStatus} and date(createdAt) = date(#{date})")
 	BigDecimal sumByStatusAndDate(@Param("appId") String appId, @Param("payStatus") Integer payStatus,@Param("date") Date date);
 

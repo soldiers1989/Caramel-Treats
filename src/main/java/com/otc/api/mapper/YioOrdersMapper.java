@@ -46,6 +46,9 @@ public interface YioOrdersMapper {
 	@Select("SELECT sum(order_price) FROM yio_orders where date(createdAt) = date(#{date}) and pay_qr = #{appId} and pay_status ='已支付'")
 	BigDecimal sumByDate(@Param("appId") String appId,@Param("date") Date date,@Param("status") String status);
 
+	@Select("SELECT sum(order_price) FROM yio_orders where pay_qr = #{appId} and pay_status ='已支付'")
+	BigDecimal sum(@Param("appId") String appId,@Param("status") String status);
+
 	@Select("SELECT sum(order_price) as amount,date(createdAt) as date FROM yio_orders where pay_status ='已支付' and pay_qr = #{appId} group by date(createdAt) order by date desc limit #{limit}")
 	List<IndexReport> report(@Param("appId") String appId,@Param("limit") Integer limit);
 

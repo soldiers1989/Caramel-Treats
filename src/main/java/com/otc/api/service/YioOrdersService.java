@@ -57,6 +57,9 @@ public class YioOrdersService {
 	@Autowired
 	private YioBillMapper yioBillMapper;
 
+	@Autowired
+	private YioShopRateMapper yioShopRateMapper;
+
 	@Value("${WEB_SOCKET}")
 	private String WEB_SOCKET;
 
@@ -80,16 +83,42 @@ public class YioOrdersService {
 			shop = yioShopMapper.findById(shop.getId());
 		}
 		Index index = new Index();
-		BigDecimal orderBalance = yioOrdersMapper.sum(shop.getAppId(),"已支付");
+		BigDecimal wechat = yioOrdersMapper.sumByPayType(shop.getAppId(),"wechat","已支付");
+		BigDecimal alipay = yioOrdersMapper.sumByPayType(shop.getAppId(),"alipay","已支付");
+		BigDecimal alipayred = yioOrdersMapper.sumByPayType(shop.getAppId(),"alipayred","已支付");
 		BigDecimal balance = new BigDecimal(0);
-		if (orderBalance!=null){
-			balance = orderBalance.multiply(shop.getRate());
-			balance = orderBalance.subtract(balance);
-			Integer count = yioWithdrawMapper.countByAppId(shop.getAppId());
-			balance = balance.subtract(new BigDecimal(count*3));
-
+		if (wechat==null){
+			wechat = new BigDecimal(0);
 		}
-		index.setTodayBalance(balance);
+		YioShopRate wechatRate = yioShopRateMapper.findAllByPayType(shop.getId(),2);
+		if (wechatRate!=null){
+			BigDecimal wr = wechat.multiply(wechatRate.getRate());
+			balance = wechat.subtract(wr);
+		}
+		if (alipay==null){
+			alipay = new BigDecimal(0);
+		}
+		YioShopRate alipayRate = yioShopRateMapper.findAllByPayType(shop.getId(),1);
+		if (alipayRate!=null){
+			BigDecimal ar = alipay.multiply(alipayRate.getRate());
+			BigDecimal ali = alipay.subtract(ar);
+			balance = balance.add(ali);
+		}
+
+		if (alipayred==null){
+			alipayred = new BigDecimal(0);
+		}
+
+		YioShopRate alipayRedRate = yioShopRateMapper.findAllByPayType(shop.getId(),3);
+		if (alipayRedRate!=null){
+			BigDecimal arr = alipayred.multiply(alipayRedRate.getRate());
+			BigDecimal ali = alipayred.subtract(arr);
+			balance = balance.add(ali);
+		}
+
+		BigDecimal withdraw = yioWithdrawMapper.sumByStatus(shop.getAppId(),2);
+
+		index.setTodayBalance(balance.subtract(withdraw));
 		index.setTodayCount(yioOrdersMapper.countByCreateDate(shop.getAppId(),DateUtils.startDate(new Date())));
 		index.setWithdraw(yioWithdrawMapper.sumByStatus(shop.getAppId(),1));
 		index.setWithdrawCount(yioWithdrawMapper.countByStatus(shop.getAppId(),1));

@@ -117,7 +117,9 @@ public class YioOrdersService {
 		}
 
 		BigDecimal withdraw = yioWithdrawMapper.sumByStatus(shop.getAppId(),2);
-
+		if (withdraw==null){
+			withdraw = new BigDecimal(0);
+		}
 		index.setTodayBalance(balance.subtract(withdraw));
 		index.setTodayCount(yioOrdersMapper.countByCreateDate(shop.getAppId(),DateUtils.startDate(new Date())));
 		index.setWithdraw(yioWithdrawMapper.sumByStatus(shop.getAppId(),1));

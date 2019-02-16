@@ -117,6 +117,9 @@ public class YioOrdersService {
 		}
 
 		BigDecimal withdraw = yioWithdrawMapper.sum(shop.getAppId());
+		if (withdraw==null){
+			withdraw = new BigDecimal(0);
+		}
 		int count = yioWithdrawMapper.countByAppId(shop.getAppId());
 		BigDecimal rate = new BigDecimal(count*3);
 		withdraw = withdraw.add(rate);

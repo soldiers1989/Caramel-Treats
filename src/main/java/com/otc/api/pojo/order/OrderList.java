@@ -14,6 +14,7 @@ public class OrderList {
     private BigDecimal orderPrice;//
     private BigDecimal payPrice;//
     private String username;
+    private String payType;//
     private String name;
     private Integer type;//1:未到帐 2:已到帐 3:已过期 4:部帐 5:清算
 
@@ -94,5 +95,13 @@ public class OrderList {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType;
     }
 }

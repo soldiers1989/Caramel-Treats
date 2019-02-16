@@ -116,11 +116,15 @@ public class YioOrdersService {
 			balance = balance.add(ali);
 		}
 
-		BigDecimal withdraw = yioWithdrawMapper.sumByStatus(shop.getAppId(),2);
+		BigDecimal withdraw = yioWithdrawMapper.sum(shop.getAppId());
+		int count = yioWithdrawMapper.countByAppId(shop.getAppId());
+		BigDecimal rate = new BigDecimal(count*3);
+		withdraw = withdraw.add(rate);
 		if (withdraw==null){
 			withdraw = new BigDecimal(0);
 		}
 		index.setTodayBalance(balance.subtract(withdraw));
+
 		index.setTodayCount(yioOrdersMapper.countByCreateDate(shop.getAppId(),DateUtils.startDate(new Date())));
 		index.setWithdraw(yioWithdrawMapper.sumByStatus(shop.getAppId(),1));
 		index.setWithdrawCount(yioWithdrawMapper.countByStatus(shop.getAppId(),1));

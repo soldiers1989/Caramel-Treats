@@ -16,6 +16,7 @@ public class OrderList {
     private String username;
     private String payType;//
     private String name;
+    private String qname;
     private Integer type;//1:未到帐 2:已到帐 3:已过期 4:部帐 5:清算
 
     public String getUsername() {
@@ -103,5 +104,13 @@ public class OrderList {
 
     public void setPayType(String payType) {
         this.payType = payType;
+    }
+
+    public String getQname() {
+        return qname;
+    }
+
+    public void setQname(String qname) {
+        this.qname = qname;
     }
 }

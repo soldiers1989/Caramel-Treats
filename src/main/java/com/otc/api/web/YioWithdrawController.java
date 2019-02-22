@@ -12,6 +12,7 @@ import com.otc.api.domain.YioSeller;
 import com.otc.api.domain.YioShop;
 import com.otc.api.domain.YioSysSettle;
 import com.otc.api.pojo.withdraw.WithdrawPoJo;
+import com.otc.api.service.YioShopService;
 import io.swagger.annotations.Api;
 
 import io.swagger.annotations.ApiOperation;
@@ -34,6 +35,9 @@ public class YioWithdrawController {
 
 	@Autowired
 	private YioWithdrawService yioWithdrawService;
+
+	@Autowired
+	private YioShopService yioShopService;
 
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
@@ -82,5 +86,13 @@ public class YioWithdrawController {
 	public Object create(@RequestBody WithdrawPoJo withdrawPoJo, HttpServletRequest request) throws MyException, AlipayApiException {
 		yioWithdrawService.create(withdrawPoJo);
 		return null;
+	}
+
+	@TokenFinance
+	@ApiOperation(value = "列表", notes = "" ,response=YioShop.class)
+	@RequestMapping(value = "/list",method = RequestMethod.GET,produces = "application/json")
+	public Object list(HttpServletRequest request) throws MyException {
+		YioShop user = (YioShop)request.getAttribute("user");
+		return yioShopService.list(user);
 	}
 }

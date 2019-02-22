@@ -89,7 +89,7 @@ public class PayUtil {
             authInfo.append(key).append("=").append(map.get(key)); 
         }
 		System.out.println(authInfo.toString());
-		String r = AlipaySignature.rsaSign(authInfo.toString(), AlipayConfig.key, "utf-8", "RSA");
+		String r = AlipaySignature.rsaSign(authInfo.toString(), privateKey, "utf-8", "RSA");
         return r;
     }
 

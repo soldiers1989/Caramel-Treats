@@ -17,6 +17,8 @@ import com.otc.api.pojo.order.OrderList;
 import com.otc.api.pojo.order.OrderReport;
 import com.otc.api.pojo.order.OrderWithdrawList;
 import com.otc.api.pojo.socket.Socket;
+import com.otc.api.pojo.withdraw.WithdrawPoJo;
+import com.otc.api.result.ApiResult;
 import com.otc.api.result.Header;
 import com.otc.api.util.*;
 import org.apache.log4j.Logger;
@@ -35,6 +37,9 @@ public class YioWithdrawService {
 
 	@Autowired
 	private YioShopMapper yioShopMapper;
+
+	@Value("${PAY_URL}")
+	private String PAY_URL;
 
 	public OrderReport report(Integer id, YioShop shop, Date start, Date end, Integer type, String orderNo, String serverNo, String userName){
 		OrderReport report = new OrderReport();
@@ -107,4 +112,27 @@ public class YioWithdrawService {
 		return info;
 	}
 
+	public void create(WithdrawPoJo withdrawPoJo) throws MyException, AlipayApiException {
+		YioShop shop =yioShopMapper.findById(withdrawPoJo.getShopId());
+		//发起支付请求
+		Map<String, String> map = new HashMap<>();
+		map.put("appId",shop.getAppId());
+		map.put("amount",withdrawPoJo.getAmount().toString());
+		map.put("orderId",OrderUtil.getOrderNoByAtomic());
+		map.put("payType",withdrawPoJo.getPayType().toString());
+		map.put("timestamp",DateUtils.getDateFromString(new Date()));
+		map.put("name",withdrawPoJo.getName());
+		map.put("url","");
+		map.put("bankCard",withdrawPoJo.getBankCard());
+		map.put("bankDeposit",withdrawPoJo.getBankDeposit());
+		map.put("notifyUrl","");
+		map.put("version","1.0");
+		map.put("sign", PayUtil.getSign(map,shop.getPrivateKey()));
+		Gson gson = new Gson();
+		String r = HttpRequest.sendPost(PAY_URL,gson.toJson(map));
+		ApiResult result = gson.fromJson(r, ApiResult.class);
+		if (!result.getHeader().getCode().equals(0)){
+			throw new MyException("100");
+		}
+	}
 }

@@ -4,10 +4,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import com.alipay.api.AlipayApiException;
 import com.otc.api.aop.Token;
 import com.otc.api.aop.TokenAdmin;
+import com.otc.api.aop.TokenFinance;
 import com.otc.api.domain.YioSeller;
 import com.otc.api.domain.YioShop;
+import com.otc.api.domain.YioSysSettle;
+import com.otc.api.pojo.withdraw.WithdrawPoJo;
 import io.swagger.annotations.Api;
 
 import io.swagger.annotations.ApiOperation;
@@ -72,4 +76,11 @@ public class YioWithdrawController {
 		return yioWithdrawService.list(id,user,start,end,type,orderNo,serverNo,userName,status,pageNo,sizeNo);
 	}
 
+	@TokenFinance
+	@ApiOperation(value = "业务提现", notes = "" ,response=YioSysSettle.class)
+	@RequestMapping(value = "/create",method = RequestMethod.POST,produces = "application/json")
+	public Object create(@RequestBody WithdrawPoJo withdrawPoJo, HttpServletRequest request) throws MyException, AlipayApiException {
+		yioWithdrawService.create(withdrawPoJo);
+		return null;
+	}
 }

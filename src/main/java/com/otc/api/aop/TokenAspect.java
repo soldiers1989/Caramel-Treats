@@ -118,7 +118,14 @@ public class TokenAspect {
 					if (!user.getAuthority().equals(4)){
 						return g.toJson(new ApiResult(40002));
 					}else{
-						request.setAttribute("user",user);
+						YioShop shop = new YioShop();
+						if (user.getServerId()==null){
+							shop.setId(0);
+						}else {
+							shop.setId(user.getServerId());
+						}
+						shop.setAuthority(user.getAuthority());
+						request.setAttribute("user",shop);
 						request.setAttribute("token",uuid);
 					}
 

@@ -54,7 +54,7 @@ public class YioShopService {
 	 * @return
 	 */
 	public List<Shop> list(YioShop shop){
-		if (shop.getAuthority().equals(1)){
+		if (shop.getAuthority().equals(1) || shop.getAuthority().equals(4)){
 			return yioShopMapper.find();
 		}else {
 			return yioShopMapper.findId(shop.getId());

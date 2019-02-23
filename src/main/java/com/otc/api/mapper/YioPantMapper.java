@@ -40,4 +40,7 @@ public interface YioPantMapper {
 
 	@Select("SELECT count(id) FROM yio_pant where pant = #{pant}")
 	Integer countByPant(@Param("pant") Integer pant);
+
+	@Select("SELECT count(id) FROM yio_pant where pant = #{pant} and type = #{type}")
+	Integer countByPantAndType(@Param("pant") Integer pant,@Param("type") Integer type);
 }

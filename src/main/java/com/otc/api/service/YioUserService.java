@@ -1,5 +1,6 @@
 package com.otc.api.service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -38,6 +39,9 @@ public class YioUserService {
 	@Autowired
 	private YioRatioMapper ratioMapper;
 
+	@Autowired
+	private YioPantMapper pantMapper;
+
 	/**
 	 * 交易员统计
 	 * @param shop
@@ -50,6 +54,8 @@ public class YioUserService {
 		userReport.setWork(yioUserMapper.countWork());
 		userReport.setAli(yioSellerMapper.countByType(1));
 		userReport.setWei(yioSellerMapper.countByType(2));
+		userReport.setAliWork(pantMapper.countByPantAndType(1,1));
+		userReport.setWeiWork(pantMapper.countByPantAndType(1,2));
 		return userReport;
 	}
 
@@ -61,9 +67,9 @@ public class YioUserService {
 	 * @param size
 	 * @return
 	 */
-	public PageInfo<UserList> list(String username,String qname,Integer work,Integer page,Integer size){
+	public PageInfo<UserList> list(String username, String name, String qname,Integer work, Integer page, Integer size){
 		PageHelper.startPage(page,size);
-		List<UserList> lists = yioUserMapper.query(username,qname,work);
+		List<UserList> lists = yioUserMapper.query(username,name,qname,work);
 		PageInfo<UserList> info = new PageInfo<>(lists);
 		return info;
 	}

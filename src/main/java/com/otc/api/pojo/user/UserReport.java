@@ -7,6 +7,8 @@ public class UserReport {
     private Integer work;//正在接单
     private Integer ali;//支付宝用户
     private Integer wei;//微信用户
+    private Integer aliWork;//支付宝用户
+    private Integer weiWork;//微信用户
 
     public Integer getServiceCount() {
         return serviceCount;
@@ -46,5 +48,21 @@ public class UserReport {
 
     public void setWei(Integer wei) {
         this.wei = wei;
+    }
+
+    public Integer getAliWork() {
+        return aliWork;
+    }
+
+    public void setAliWork(Integer aliWork) {
+        this.aliWork = aliWork;
+    }
+
+    public Integer getWeiWork() {
+        return weiWork;
+    }
+
+    public void setWeiWork(Integer weiWork) {
+        this.weiWork = weiWork;
     }
 }

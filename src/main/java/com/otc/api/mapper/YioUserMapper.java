@@ -51,6 +51,9 @@ public interface YioUserMapper {
 			"<if test=\"username!=null and username!=''\">"+
 				"and username like \"%\"#{username}\"%\"" +
 			"</if>" +
+			"<if test=\"name!=null and name!=''\">"+
+				"and s.name like \"%\"#{name}\"%\"" +
+			"</if>" +
 			"<if test=\"qname!=null and qname!=''\">"+
 				"and s.qname like \"%\"#{qname}\"%\"" +
 			"</if>" +
@@ -58,7 +61,7 @@ public interface YioUserMapper {
 				"and work = #{work}"+
 			"</if>"+
 			"</script>")
-	List<UserList> query(@Param("username") String username,@Param("qname") String qname,@Param("work") Integer wrok);
+	List<UserList> query(@Param("username") String username,@Param("name") String name,@Param("qname") String qname,@Param("work") Integer wrok);
 
 
 	@Select("SELECT id,username,(select sum(amount) from yio_account where user_id = u.id) as amount,(SELECT sum(stream) FROM yio_bill where user_id = u.id) as reward,work,status,(select sum(amount) from yio_withdraw where user_id =u.id and pay_status = 1) as withdraw FROM yio_user u WHERE u.id=#{id}")

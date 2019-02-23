@@ -180,7 +180,7 @@ public interface YioOrdersMapper {
 
 	@Results({ @Result(property = "orderId", column = "order_id"),@Result(property = "orderPrice", column = "order_price"),@Result(property = "payPrice", column = "pay_price")})
 	@Select("<script>" +
-			"select o.*,u.username as username,o.pay_type as payType,(select qname from yio_seller s where s.id = o.seller_id limit 1) as qname ,(select name from yio_seller s where s.user_id = u.id limit 1) as name from yio_orders o,yio_user u where u.id = o.user_id and o.pay_qr=#{appId}" +
+			"select o.*,u.username as username,o.pay_type as payType,s.qname as qname ,s.name as name from yio_orders o,yio_user u,yio_seller s where u.id = o.user_id and s.id = o.seller_id and o.pay_qr=#{appId}" +
 			"<if test=\"start!=null\">"+
 				"and o.createdAt between #{start} and #{end} " +
 			"</if>" +
@@ -193,12 +193,15 @@ public interface YioOrdersMapper {
 			"<if test=\"username!=null and username!=''\">"+
 				"and u.username like \"%\"#{username}\"%\""+
 			"</if>"+
+			"<if test=\"qname!=null and qname!=''\">"+
+				"and s.qname like \"%\"#{qname}\"%\""+
+			"</if>"+
 			"<if test=\"type!=null\">"+
 				"and o.type=#{type}"+
 			"</if>"+
 			" order by o.id desc"+
 			"</script>")
-	List<OrderList> query(@Param("type") Integer type,@Param("appId") String appId, @Param("start") Date start, @Param("end") Date end, @Param("orderId") String orderId, @Param("orderNo") String orderNo, @Param("username") String username);
+	List<OrderList> query(@Param("type") Integer type,@Param("appId") String appId, @Param("start") Date start, @Param("end") Date end, @Param("orderId") String orderId, @Param("orderNo") String orderNo, @Param("username") String username,@Param("qname") String qname);
 
 
 }

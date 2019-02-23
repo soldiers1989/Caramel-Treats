@@ -136,7 +136,7 @@ public interface YioWithdrawMapper {
 
 
 	@Select("<script>" +
-			"select o.id,o.createdAt,o.orderId as orderId,o.withdraw_no as extension, o.amount as orderPrice,o.amount as payPrice,o.pay_status as type,u.username as username from yio_withdraw o,yio_user u where u.id = o.user_id and o.app_id=#{appId}" +
+			"select o.id,s.qname as qname ,o.createdAt,o.orderId as orderId,o.withdraw_no as extension, o.amount as orderPrice,o.amount as payPrice,o.pay_status as type,u.username as username from yio_withdraw o,yio_user u,yio_seller s where u.id = o.user_id and o.seller_id = s.id and o.app_id=#{appId}" +
 			"<if test=\"start!=null\">"+
 				"and o.createdAt between #{start} and #{end} " +
 			"</if>" +
@@ -149,11 +149,14 @@ public interface YioWithdrawMapper {
 			"<if test=\"username!=null and username!=''\">"+
 				"and u.username like \"%\"#{username}\"%\""+
 			"</if>"+
+			"<if test=\"qname!=null and qname!=''\">"+
+				"and s.qname like \"%\"#{qname}\"%\""+
+			"</if>"+
 			"<if test=\"type!=null\">"+
 				"and o.pay_status=#{type}"+
 			"</if>"+
 			" order by o.id desc"+
 			"</script>")
-	List<OrderWithdrawList> query(@Param("type") Integer type, @Param("appId") String appId, @Param("start") Date start, @Param("end") Date end, @Param("orderId") String orderId, @Param("orderNo") String orderNo, @Param("username") String username);
+	List<OrderWithdrawList> query(@Param("type") Integer type, @Param("appId") String appId, @Param("start") Date start, @Param("end") Date end, @Param("orderId") String orderId, @Param("orderNo") String orderNo, @Param("username") String username,@Param("qname") String qname);
 
 }

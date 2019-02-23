@@ -13,6 +13,7 @@ public class UserList {
     private BigDecimal reward;//收益
     private Integer work;//1:上班 2下班
     private Integer status;//1 正常 2：冻结
+    private String qname;
 
     public Integer getId() {
         return id;
@@ -74,5 +75,13 @@ public class UserList {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getQname() {
+        return qname;
+    }
+
+    public void setQname(String qname) {
+        this.qname = qname;
     }
 }

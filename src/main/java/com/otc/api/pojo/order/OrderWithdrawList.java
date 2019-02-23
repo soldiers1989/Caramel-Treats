@@ -15,6 +15,7 @@ public class OrderWithdrawList {
     private BigDecimal payPrice;//
     private String username;
     private Integer type;//1:未到帐 2:已到帐 3:已过期 4:部帐 5:清算
+    private String qname;
 
     public String getUsername() {
         return username;
@@ -85,5 +86,13 @@ public class OrderWithdrawList {
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public String getQname() {
+        return qname;
+    }
+
+    public void setQname(String qname) {
+        this.qname = qname;
     }
 }

@@ -77,7 +77,7 @@ public class YioWithdrawService {
 		return report;
 	}
 
-	public PageInfo<OrderWithdrawList> list(Integer id, YioShop shop, Date start, Date end, Integer type, String orderNo, String serverNo, String userName, Integer status, Integer page, Integer size){
+	public PageInfo<OrderWithdrawList> list(Integer id, YioShop shop, Date start, Date end, Integer type, String orderNo, String serverNo, String userName,String qname, Integer status, Integer page, Integer size){
 		if (shop.getAuthority().equals(1)){
 			if (id == 0){
 				shop = yioShopMapper.findAll().get(0);
@@ -107,7 +107,7 @@ public class YioWithdrawService {
 			status = null;
 		}
 		PageHelper.startPage(page,size);
-		List<OrderWithdrawList> orderLists = yioWithdrawMapper.query(status,shop.getAppId(),start,end,orderNo,serverNo,userName);
+		List<OrderWithdrawList> orderLists = yioWithdrawMapper.query(status,shop.getAppId(),start,end,orderNo,serverNo,userName,qname);
 		PageInfo<OrderWithdrawList> info = new PageInfo<>(orderLists);
 		return info;
 	}

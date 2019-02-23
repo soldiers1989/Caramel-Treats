@@ -61,9 +61,9 @@ public class YioUserService {
 	 * @param size
 	 * @return
 	 */
-	public PageInfo<UserList> list(String username,Integer work,Integer page,Integer size){
+	public PageInfo<UserList> list(String username,String qname,Integer work,Integer page,Integer size){
 		PageHelper.startPage(page,size);
-		List<UserList> lists = yioUserMapper.query(username,work);
+		List<UserList> lists = yioUserMapper.query(username,qname,work);
 		PageInfo<UserList> info = new PageInfo<>(lists);
 		return info;
 	}

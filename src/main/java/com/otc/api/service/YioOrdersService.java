@@ -201,7 +201,7 @@ public class YioOrdersService {
 		return report;
 	}
 
-	public PageInfo<OrderList> list(Integer id, YioShop shop, Date start, Date end, Integer type, String orderNo, String serverNo, String userName, Integer status,Integer page,Integer size){
+	public PageInfo<OrderList> list(Integer id, YioShop shop, Date start, Date end, Integer type, String orderNo, String serverNo, String userName,String qname, Integer status,Integer page,Integer size){
 		if (shop.getAuthority().equals(1)){
 			if (id == 0){
 				shop = yioShopMapper.findAll().get(0);
@@ -231,7 +231,7 @@ public class YioOrdersService {
 			status = null;
 		}
 		PageHelper.startPage(page,size);
-		List<OrderList> orderLists = yioOrdersMapper.query(status,shop.getAppId(),start,end,orderNo,serverNo,userName);
+		List<OrderList> orderLists = yioOrdersMapper.query(status,shop.getAppId(),start,end,orderNo,serverNo,userName,qname);
 		PageInfo<OrderList> info = new PageInfo<>(orderLists);
 		return info;
 	}

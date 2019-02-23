@@ -66,13 +66,14 @@ public class YioOrdersController {
 						 @RequestParam(value = "orderNo",required = false) String orderNo,
 						 @RequestParam(value = "serverNo",required = false) String serverNo,
 						 @RequestParam(value = "userName",required = false) String userName,
+					     @RequestParam(value = "qname",required = false) String qname,
 					     @RequestParam(value = "status",required = false) Integer status,
 					     @Param("page") Integer page,@Param("size") Integer size,
 						 HttpServletRequest request) throws MyException {
 		YioShop user = (YioShop)request.getAttribute("user");
 		int sizeNo = size == null ? 10 : size.intValue();
 		int pageNo = page == null ? 1 : page.intValue();
-		return yioOrdersService.list(id,user,start,end,type,orderNo,serverNo,userName,status,pageNo,sizeNo);
+		return yioOrdersService.list(id,user,start,end,type,orderNo,serverNo,userName,qname,status,pageNo,sizeNo);
 	}
 
 	@TokenAdmin

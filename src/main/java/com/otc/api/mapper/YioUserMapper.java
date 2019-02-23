@@ -47,15 +47,18 @@ public interface YioUserMapper {
 	int delete(YioUser yioUser);
 
 	@Select("<script>" +
-			"SELECT id,username,(select name from yio_seller where user_id = u.id limit 1) as name ,(select sum(amount) from yio_account where user_id = u.id) as amount,(SELECT sum(stream) FROM yio_bill where user_id = u.id) as reward,work,status FROM yio_user u WHERE 1=1" +
+			"SELECT u.id,u.username,s.name as name,s.qname as qname ,(select sum(amount) from yio_account where user_id = u.id) as amount,(SELECT sum(stream) FROM yio_bill where user_id = u.id) as reward,work,status FROM yio_user u left join yio_seller s on u.id = s.user_id WHERE 1=1" +
 			"<if test=\"username!=null and username!=''\">"+
 				"and username like \"%\"#{username}\"%\"" +
+			"</if>" +
+			"<if test=\"qname!=null and qname!=''\">"+
+				"and s.qname like \"%\"#{qname}\"%\"" +
 			"</if>" +
 			"<if test=\"work!=null\">"+
 				"and work = #{work}"+
 			"</if>"+
 			"</script>")
-	List<UserList> query(@Param("username") String username,@Param("work") Integer wrok);
+	List<UserList> query(@Param("username") String username,@Param("qname") String qname,@Param("work") Integer wrok);
 
 
 	@Select("SELECT id,username,(select sum(amount) from yio_account where user_id = u.id) as amount,(SELECT sum(stream) FROM yio_bill where user_id = u.id) as reward,work,status,(select sum(amount) from yio_withdraw where user_id =u.id and pay_status = 1) as withdraw FROM yio_user u WHERE u.id=#{id}")

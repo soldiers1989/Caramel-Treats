@@ -17,7 +17,7 @@ public class ExceptionPoJo {
     private String createDate;
     private Integer status;//1:未处理  2已处理
     private String bankName;
-
+    private String cardNo;
     public Integer getId() {
         return id;
     }
@@ -96,5 +96,13 @@ public class ExceptionPoJo {
 
     public void setBankName(String bankName) {
         this.bankName = bankName;
+    }
+
+    public String getCardNo() {
+        return cardNo;
+    }
+
+    public void setCardNo(String cardNo) {
+        this.cardNo = cardNo;
     }
 }

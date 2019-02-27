@@ -41,7 +41,7 @@ public interface YioExceptionOrdersMapper {
 	int delete(YioExceptionOrders yioExceptionOrders);
 
 	@Select("<script>" +
-			"SELECT e.id as id,e.amount as amount,u.username as username ,s.username as payName,e.createdAt as createdAt,s.name as name,s.type as type,e.status as status FROM yio_exception_orders e,yio_user u,yio_seller s where u.id = s.user_id and e.user_id = u.id and e.seller_id = s.id" +
+			"SELECT e.id as id,e.amount as amount,u.username as username ,s.username as payName,e.createdAt as createdAt,s.name as name,s.type as type,e.status as status,(select bank_name from yio_bank yb where yb.id = s.bank_id) as bankName FROM yio_exception_orders e,yio_user u,yio_seller s where u.id = s.user_id and e.user_id = u.id and e.seller_id = s.id" +
 			"<if test=\"start!=null\">"+
 				"and e.createdAt between #{start} and #{end} " +
 			"</if>" +

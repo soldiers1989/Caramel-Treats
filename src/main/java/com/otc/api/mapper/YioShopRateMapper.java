@@ -12,6 +12,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
 import org.apache.ibatis.annotations.Update;
 
+import com.otc.api.domain.YioPayType;
 import com.otc.api.domain.YioShopRate;
 
 @Mapper
@@ -20,6 +21,9 @@ public interface YioShopRateMapper {
 	@Results({ @Result(property = "id", column = "id"),@Result(property = "payType", column = "pay_type"),@Result(property = "rate", column = "rate"),@Result(property = "shopId", column = "shop_id")})
 	@Select("SELECT * FROM yio_shop_rate WHERE id = #{id}")
 	YioShopRate findById(@Param("id") Integer id);
+	@Results({ @Result(property = "id", column = "id"),@Result(property = "payType", column = "pay_type"),@Result(property = "name", column = "name"),@Result(property = "parentId", column = "parent_id")})
+	@Select("SELECT * FROM yio_pay_type ")
+	List<YioPayType> findAllPayType();
 
 	@Results({ @Result(property = "id", column = "id"),@Result(property = "payType", column = "pay_type"),@Result(property = "rate", column = "rate"),@Result(property = "shopId", column = "shop_id")})
 	@Select("SELECT * FROM yio_shop_rate")
@@ -31,6 +35,9 @@ public interface YioShopRateMapper {
 
 	@Update("update yio_shop_rate set pay_type=#{payType},rate=#{rate},shop_id=#{shopId} where id=#{id}")
 	int update(YioShopRate yioShopRate);
+	
+	@Update("update yio_shop_rate set pay_type=#{payType} where id=#{id}")
+	int updateOpenOrClose(@Param("payType") Integer payType ,@Param("shopId") Integer id);
 
 	@Delete("delete from yio_shop_rate where id=#{id}")
 	int delete(YioShopRate yioShopRate);
@@ -38,4 +45,8 @@ public interface YioShopRateMapper {
 	@Results({ @Result(property = "id", column = "id"),@Result(property = "payType", column = "pay_type"),@Result(property = "rate", column = "rate"),@Result(property = "shopId", column = "shop_id")})
 	@Select("SELECT * FROM yio_shop_rate where shop_id = #{shopId} and pay_type = #{payType}")
 	YioShopRate findAllByPayType(@Param("shopId") Integer shopId,@Param("payType") Integer payType);
+	
+	@Results({ @Result(property = "id", column = "id"),@Result(property = "payType", column = "pay_type"),@Result(property = "rate", column = "rate"),@Result(property = "shopId", column = "shop_id")})
+	@Select("SELECT * FROM yio_shop_rate where shop_id = #{shopId} ")
+	List<YioShopRate> findAllByPayShopId(@Param("shopId") Integer shopId);
 }

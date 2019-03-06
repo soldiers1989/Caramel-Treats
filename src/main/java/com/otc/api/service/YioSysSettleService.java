@@ -6,12 +6,15 @@ import java.util.List;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.gson.Gson;
 import com.otc.api.domain.YioAccount;
 import com.otc.api.domain.YioSysSettleFile;
 import com.otc.api.mapper.YioAccountMapper;
 import com.otc.api.mapper.YioSysSettleFileMapper;
 import com.otc.api.mapper.YioWithdrawMapper;
 import com.otc.api.pojo.settle.SettleShow;
+import com.otc.api.util.HttpRequest;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class YioSysSettleService {
+
+	private Logger logger = Logger.getLogger(getClass());
 
 	@Autowired
 	private YioSysSettleMapper yioSysSettleMapper;
@@ -36,6 +41,9 @@ public class YioSysSettleService {
 
 	@Value("${URL}")
 	private String URL;
+
+	@Value("${BILL_URL}")
+	private String BILL_URL;
 
 	/**
 	 * 根据状态查询 清算订单
@@ -103,6 +111,13 @@ public class YioSysSettleService {
 			account.setFrozen(frozen);
 			account.setToken(account.getTotal().subtract(account.getAmount()).subtract(frozen));
 			yioAccountMapper.update(account);
+		}
+		Gson gson = new Gson();
+		//回调对账系统
+		try {
+			HttpRequest.sendPostEmail(BILL_URL,"type=4&text="+gson.toJson(yioSysSettle));
+		}catch (Exception e){
+			logger.info("回调对账系统异常"+yioSysSettle.getId());
 		}
 	}
 }

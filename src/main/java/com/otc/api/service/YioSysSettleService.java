@@ -115,7 +115,8 @@ public class YioSysSettleService {
 		Gson gson = new Gson();
 		//回调对账系统
 		try {
-			HttpRequest.sendPostEmail(BILL_URL,"type=4&text="+gson.toJson(yioSysSettle));
+			String str = HttpRequest.sendPostEmail(BILL_URL,"type=4&text="+gson.toJson(yioSysSettle));
+			logger.info("回调对账系统--清算订单 返回值"+str);
 		}catch (Exception e){
 			logger.info("回调对账系统异常--清算订单"+yioSysSettle.getId());
 		}

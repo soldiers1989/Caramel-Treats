@@ -117,7 +117,7 @@ public class YioSysSettleService {
 		try {
 			HttpRequest.sendPostEmail(BILL_URL,"type=4&text="+gson.toJson(yioSysSettle));
 		}catch (Exception e){
-			logger.info("回调对账系统异常"+yioSysSettle.getId());
+			logger.info("回调对账系统异常--清算订单"+yioSysSettle.getId());
 		}
 	}
 }

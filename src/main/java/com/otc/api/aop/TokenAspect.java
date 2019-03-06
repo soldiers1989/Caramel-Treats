@@ -69,6 +69,7 @@ public class TokenAspect {
 						}else {
 							shop.setId(user.getServerId());
 						}
+						shop.setUsername(user.getUsername());
 						shop.setAuthority(user.getAuthority());
 						request.setAttribute("user",shop);
 						request.setAttribute("token",uuid);

@@ -4,7 +4,7 @@ public class YioPayType {
 	//
 	private String id;
 	//支付类型编号
-	private String payType;
+	private Integer payType;
 	//支付类型名称
 	private String name;
 	//所属支付类型，如支付宝红包属于支付宝
@@ -15,10 +15,11 @@ public class YioPayType {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public String getPayType() {
+	
+	public Integer getPayType() {
 		return payType;
 	}
-	public void setPayType(String payType) {
+	public void setPayType(Integer payType) {
 		this.payType = payType;
 	}
 	public String getName() {

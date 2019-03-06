@@ -205,7 +205,7 @@ public class YioShopService {
 	 */
 	@Transactional(rollbackFor=MyException.class)
 	public int create(YioShop yioShop) throws Exception {
-		if(StringUtil.isEmpty(yioShop.getName())||yioShop.getAuthority()!=1){
+		if(StringUtil.isEmpty(yioShop.getName())||StringUtil.isEmpty(yioShop.getUsername())||StringUtil.isEmpty(yioShop.getPassword())||yioShop.getAuthority()!=1){
 			throw new MyException("50001");
 		}
 		yioShop.setCreateAt(new Date());
@@ -232,7 +232,19 @@ public class YioShopService {
 		shopDeposit.setShopId(id);
 		shopDeposit.setUpdatedAt(new Date());
 		depositMapper.insert(shopDeposit);
-		
+		//创建商户后台
+		List<YioSysUser> users = yioSysUserMapper.findAllByName(yioShop.getUsername());
+		if (users.size()>0){
+			throw new MyException("50007");
+		}
+		YioSysUser ysu =new YioSysUser();
+		ysu.setUsername(yioShop.getUsername());
+		ysu.setPassword(MD5Util.string2MD5(yioShop.getPassword()));
+		ysu.setLoginTime(new Date());
+		ysu.setToken(MD5Util.string2MD5(ysu.getUsername()+ysu.getPassword()+ysu.getLoginTime()));
+		//权限
+		ysu.setAuthority(2);
+		yioSysUserMapper.insert(ysu);
 		//创建支付渠道
 		getHasRate(String.valueOf(id), yioShop.getShopRateList());
 		return 0;

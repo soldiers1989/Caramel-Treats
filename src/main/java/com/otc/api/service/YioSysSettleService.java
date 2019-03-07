@@ -116,7 +116,7 @@ public class YioSysSettleService {
 		//回调对账系统
 		try {
 			String str = HttpRequest.sendPostEmail(BILL_URL,"type=4&text="+gson.toJson(sysSettle));
-			logger.info("回调对账系统--清算订单 返回值"+str);
+			logger.info("回调对账系统商户清算订单--返回"+str);
 		}catch (Exception e){
 			logger.info("回调对账系统异常--清算订单"+sysSettle.getId());
 		}

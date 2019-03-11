@@ -36,6 +36,14 @@ public class Header {
 			this.message = "用户未登录";
 		} else if (code == 40002) {
 			this.message = "用户令牌错误";
+		}else if(code == 50001) {
+			this.message = "商户新增参数错误";
+		}else if(code == 50002) {
+			this.message = "商户禁/启用失败";
+		}else if(code == 50003) {
+			this.message = "未找到该商户";
+		}else if(code == 50007) {
+			this.message = "商户名称已存在";
 		}
 	}
 

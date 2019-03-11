@@ -13,6 +13,16 @@ public class YioShopRate {
 	//
 	private Integer shopId;
 
+	private Integer disable;
+	
+	public Integer getDisable() {
+		return disable;
+	}
+
+	public void setDisable(Integer disable) {
+		this.disable = disable;
+	}
+
 	public void setId(Integer id){
 		this.id=id;
 	}

@@ -2,6 +2,7 @@ package com.otc.api.domain;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 public class YioShop {
 
 	//
@@ -26,6 +27,36 @@ public class YioShop {
 	private String token;
 
 	private BigDecimal rate;
+
+	private Integer disable;
+	
+	private List<YioShopRate> shopRateList;
+	
+	private Integer shopRateSize;
+	
+	public Integer getShopRateSize() {
+		return shopRateSize;
+	}
+
+	public void setShopRateSize(Integer shopRateSize) {
+		this.shopRateSize = shopRateSize;
+	}
+
+	public List<YioShopRate> getShopRateList() {
+		return shopRateList;
+	}
+
+	public void setShopRateList(List<YioShopRate> shopRateList) {
+		this.shopRateList = shopRateList;
+	}
+
+	public Integer getDisable() {
+		return disable;
+	}
+
+	public void setDisable(Integer disable) {
+		this.disable = disable;
+	}
 
 	public void setId(Integer id){
 		this.id=id;

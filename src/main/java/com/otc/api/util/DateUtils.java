@@ -67,7 +67,12 @@ public class DateUtils {
 		String newDate = simple.format(date);
 		return newDate;
 	}
-
+	public static String getDateFromString3(Date date) {
+		SimpleDateFormat simple = new SimpleDateFormat("yyyyMMddHHmmss");
+		simple.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+		String newDate = simple.format(date);
+		return newDate;
+	}
 	public static Date startDate(Date date) {
 		SimpleDateFormat simple = new SimpleDateFormat("yyyy-MM-dd");
 		simple.setTimeZone(TimeZone.getTimeZone("GMT+8"));

@@ -4,6 +4,8 @@ import java.util.Date;
 public class YioSeller {
 
 	//
+	private String ids;
+	
 	private Integer id;
 	//名称
 	private String name;
@@ -19,6 +21,24 @@ public class YioSeller {
 	private String username;
 	//
 	private String qr;
+
+	private Integer frozen;
+	
+	public String getIds() {
+		return ids;
+	}
+
+	public void setIds(String ids) {
+		this.ids = ids;
+	}
+
+	public Integer getFrozen() {
+		return frozen;
+	}
+
+	public void setFrozen(Integer frozen) {
+		this.frozen = frozen;
+	}
 
 	public void setId(Integer id){
 		this.id=id;

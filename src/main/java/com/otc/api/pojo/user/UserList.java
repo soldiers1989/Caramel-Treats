@@ -12,10 +12,32 @@ public class UserList {
     private BigDecimal amount;//余额
     private BigDecimal reward;//收益
     private Integer work;//1:上班 2下班
+    //账户状态
     private Integer status;//1 正常 2：冻结
     private String qname;
 
-    public Integer getId() {
+    //付款账户id
+    private String userId;
+    //付款账户状态
+    private Integer payMentStatus;//1 正常 2：冻结
+    
+    public Integer getPayMentStatus() {
+		return payMentStatus;
+	}
+
+	public void setPayMentStatus(Integer payMentStatus) {
+		this.payMentStatus = payMentStatus;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public Integer getId() {
         return id;
     }
 

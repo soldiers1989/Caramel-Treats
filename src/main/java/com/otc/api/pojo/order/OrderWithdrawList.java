@@ -16,8 +16,28 @@ public class OrderWithdrawList {
     private String username;
     private Integer type;//1:未到帐 2:已到帐 3:已过期 4:部帐 5:清算
     private String qname;
+    //银行卡号
+    private String bankNo;
+    //操作人账号
+    private String operateNo;
+    
+    public String getBankNo() {
+		return bankNo;
+	}
 
-    public String getUsername() {
+	public void setBankNo(String bankNo) {
+		this.bankNo = bankNo;
+	}
+
+	public String getOperateNo() {
+		return operateNo;
+	}
+
+	public void setOperateNo(String operateNo) {
+		this.operateNo = operateNo;
+	}
+
+	public String getUsername() {
         return username;
     }
 

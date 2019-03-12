@@ -35,6 +35,17 @@ public interface YioSellerMapper {
 
 	@Update("update yio_seller set name=#{name},url=#{url},type=#{type},user_id=#{userId},createAt=#{createAt},username=#{username},qr=#{qr} where id=#{id}")
 	int update(YioSeller yioSeller);
+	
+	@Update({
+	    "<script>"
+	            + "UPDATE yio_seller SET frozen = #{frozen} WHERE id in "
+	            + "<foreach item='item' index='index' collection='ids' open='(' separator=',' close=')'>"
+	            +       "#{item}"
+	            + "</foreach>" 
+	        +"</script>" 
+	        }
+	  )
+	int updateIds(@Param("ids")String[] ids,@Param("frozen") Integer frozen);
 
 	@Delete("delete from yio_seller where id=#{id}")
 	int delete(YioSeller yioSeller);

@@ -47,21 +47,31 @@ public interface YioUserMapper {
 	int delete(YioUser yioUser);
 
 	@Select("<script>" +
-			"SELECT u.id,u.username,s.name as name,s.qname as qname ,(select sum(amount) from yio_account where user_id = u.id) as amount,(SELECT sum(stream) FROM yio_bill where user_id = u.id) as reward,work,status FROM yio_user u left join yio_seller s on u.id = s.user_id WHERE 1=1" +
+			"SELECT u.id,s.id as userId,s.type,s.frozen as payMentStatus,u.username,s.name as name,s.qname as qname ,c.amount,(SELECT sum(stream) FROM yio_bill where user_id = u.id) as reward,work,status FROM yio_user u left join yio_seller s on u.id = s.user_id "
+			+ "left join (select SUM(amount) as amount,user_id FROM yio_account GROUP BY user_id) c on c.user_id = u.id  WHERE 1=1" +
 			"<if test=\"username!=null and username!=''\">"+
-				"and username like \"%\"#{username}\"%\"" +
+				"and u.username like \"%\"#{username}\"%\"" +
 			"</if>" +
 			"<if test=\"name!=null and name!=''\">"+
 				"and s.name like \"%\"#{name}\"%\"" +
 			"</if>" +
 			"<if test=\"qname!=null and qname!=''\">"+
 				"and s.qname like \"%\"#{qname}\"%\"" +
-			"</if>" +
+			"</if>"  +
 			"<if test=\"work!=null\">"+
 				"and work = #{work}"+
 			"</if>"+
+			"<if test=\"type!=null\">"+
+			"and s.type = #{type}"+
+			"</if>"+
+			"<if test=\"minAccount!=null\">"+
+			"and c.amount &gt; #{minAccount}"+
+			"</if>"+
+			"<if test=\"maxAccount!=null\">"+
+			"and c.amount &lt; #{maxAccount}"+
+			"</if>"+
 			"</script>")
-	List<UserList> query(@Param("username") String username,@Param("name") String name,@Param("qname") String qname,@Param("work") Integer wrok);
+	List<UserList> query(@Param("username") String username,@Param("name") String name,@Param("qname") String qname,@Param("work") Integer wrok,@Param("minAccount") Integer minAccount,@Param("maxAccount") Integer maxAccount,@Param("type") Integer type,@Param("bankNo") String bankNo);
 
 
 	@Select("SELECT id,username,(select sum(amount) from yio_account where user_id = u.id) as amount,(SELECT sum(stream) FROM yio_bill where user_id = u.id) as reward,work,status,(select sum(amount) from yio_withdraw where user_id =u.id and pay_status = 1) as withdraw FROM yio_user u WHERE u.id=#{id}")

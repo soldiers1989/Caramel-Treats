@@ -14,7 +14,18 @@ public class SellerList {
     private String bankName;
     private String cardNo;
 
-    public Integer getId() {
+    //账户状态 1:冻结 2： 解冻
+    private Integer userStatus ;
+    
+    public Integer getUserStatus() {
+		return userStatus;
+	}
+
+	public void setUserStatus(Integer userStatus) {
+		this.userStatus = userStatus;
+	}
+
+	public Integer getId() {
         return id;
     }
 

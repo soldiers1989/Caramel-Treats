@@ -24,8 +24,6 @@ public class YioSeller {
 	//
 	private String qr;
 
-	private Integer frozen;
-	
 	private String pid;
 
 	private String appId;
@@ -138,7 +136,6 @@ public class YioSeller {
 	public void setPants(List<YioPant> pants) {
 		this.pants = pants;
 	}
->>>>>>> src/main/java/com/otc/api/domain/YioSeller.java
 
 	public String getIds() {
 		return ids;

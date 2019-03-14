@@ -117,7 +117,6 @@ public class YioSelfController {
 	@ApiOperation(value = "插入交易员数据", notes = "", response=Integer.class)
 	@RequestMapping(value = "/insert",method = RequestMethod.POST,produces = "application/json")
 	public Object insertAll(){
-	   yioSelfService.insertAll();
-	   return null;
+		return yioSelfService.updateCheckStatusByOrder("123", 1);
 	}
 }

@@ -120,7 +120,7 @@ public class YioSelfService {
 			py.setOrderId(OrderUtil.getOrderNoByAtomic());
 			py.setPayType(payType);
 			py.setVersion(sellerId);
-			py.setTimestamp(DateUtils.getDateFromString5(new Date()));
+			py.setTimestamp(DateUtils.getDateFromStringT(new Date()));
 			py.setTimeExpire("");
 			Map<String, String> map = new HashMap<>();
 			map.put("appId",appid);
@@ -145,6 +145,7 @@ public class YioSelfService {
 				throw new MyException("100");
 			}
 		}
+		
 		/**
 		 * 回调
 		 * @param notify

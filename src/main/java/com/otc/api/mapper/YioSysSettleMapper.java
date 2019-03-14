@@ -1,7 +1,9 @@
 package com.otc.api.mapper;
 
+import java.util.Date;
 import java.util.List;
 
+import com.otc.api.pojo.settle.SettleList;
 import com.otc.api.pojo.settle.SettleShow;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
@@ -38,13 +40,28 @@ public interface YioSysSettleMapper {
 
 	@Results({ @Result(property = "id", column = "id"),@Result(property = "orderNo", column = "order_no"),@Result(property = "name", column = "name"),@Result(property = "amount", column = "amount"),@Result(property = "bankCard", column = "bank_card"),@Result(property = "bankName", column = "bank_name"),@Result(property = "bankDeposit", column = "bank_deposit"),@Result(property = "status", column = "status"),@Result(property = "createTime", column = "create_time"),@Result(property = "userId", column = "user_id")})
 	@Select("<script>" +
-			"SELECT * FROM yio_sys_settle where 1 =1 " +
+			"SELECT s.*,u.username FROM yio_sys_settle s,yio_user u where u.id =s.user_id " +
 			"<if test=\"status!=null\">"+
-				"and status = #{status} " +
+				"and s.status = #{status} " +
 			"</if>" +
-			" order by status "+
+			"<if test=\"start!=null\">"+
+				"and create_time between #{start} and #{end} " +
+			"</if>" +
+			"<if test=\"name!=null and name!=''\">"+
+				"and name like \"%\"#{name}\"%\""+
+			"</if>"+
+			"<if test=\"bankCard!=null and bankCard!=''\">"+
+				"and bank_card like \"%\"#{bankCard}\"%\""+
+			"</if>"+
+			"<if test=\"username!=null and username!=''\">"+
+				"and username like \"%\"#{username}\"%\""+
+			"</if>"+
+			"<if test=\"username!=null and username!=''\">"+
+				"and username like \"%\"#{username}\"%\""+
+			"</if>"+
+			" order by s.create_time desc "+
 			"</script>")
-	List<YioSysSettle> queryByStatus(@Param("status") Integer status);
+	List<SettleList> queryByStatus(@Param("status") Integer status, @Param("start") Date start, @Param("end") Date end, @Param("name") String name, @Param("bankCard") String bankCard, @Param("username") String username);
 
 	@Select("SELECT s.id as id, f.id as settleId,f.create_time as createTime ,s.order_no as orderNo,s.name as name,f.pay_amount as payAmount ,f.amount as amount ,s.bank_card as bankCard,s.bank_name as bankName ,s.bank_deposit as bankDeposit,s.status as status,f.file_url as fileUrl,f.in_file_url as inFileUrl FROM yio_sys_settle s,yio_sys_settle_file f where s.id = f.settle_id and f.settle_id = #{settleId} order by f.id desc")
 	List<SettleShow> findAllDetail(@Param("settleId") Integer settleId);

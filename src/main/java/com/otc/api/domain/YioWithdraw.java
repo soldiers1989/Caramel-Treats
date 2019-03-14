@@ -36,7 +36,7 @@ public class YioWithdraw {
 	private Integer sellerId;
 	//
 	private Date updatedAt;
-	//1:提现中 2:已完成
+	//1:提现中 2:已完成 3:处理中 4：驳回
 	private Integer payStatus;
 	//凭证url
 	private String fileUrl;

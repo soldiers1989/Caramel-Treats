@@ -1,5 +1,7 @@
 package com.otc.api.pojo.settle;
 
+import com.otc.api.util.DateUtils;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -102,7 +104,7 @@ public class SettleList {
     }
 
     public String getCreateDate() {
-        return createDate;
+        return DateUtils.getDateFromString(this.createTime);
     }
 
     public void setCreateDate(String createDate) {

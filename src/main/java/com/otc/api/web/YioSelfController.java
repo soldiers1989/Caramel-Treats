@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -80,7 +81,7 @@ public class YioSelfController {
 
 	@ApiOperation(value = "检测账户", notes = "", response = YioShopRate.class)
 	@RequestMapping(value = "/checkAccount", method = RequestMethod.POST, produces = "application/json")
-	public Object CheckAccount(@RequestBody YioSelf ys) throws AlipayApiException {
+	public Object CheckAccount(@RequestBody YioSelf ys) throws AlipayApiException, MyException {
 		return yioSelfService.CheckAccount(ys.getPayType(), ys.getAmount(),ys.getSellerId(),ys.getId());
 	}
 
@@ -90,10 +91,11 @@ public class YioSelfController {
 		return yioSelfService.notify(notify);
 	}
 	@ApiOperation(value = "定时获取订单状态", notes = "" ,response=YioOrders.class)
-	@RequestMapping(value = "/getOrderStatus",method = RequestMethod.POST,produces = "application/json")
-	public Object getOrderStatus(@RequestBody YioSelf ys) throws Exception {
-		return yioSelfService.getOrderStatus(ys.getOrderId());
+	@RequestMapping(value = "/getOrderStatus/{orderId}",method = RequestMethod.GET,produces = "application/json")
+	public Object getOrderStatus(@PathVariable("orderId") String orderId) throws MyException {
+		return yioSelfService.getOrderStatus(orderId);
 	}
+	
 	/**
 	 * 1:冻结  2：解冻
 	 * @param ys
@@ -107,7 +109,7 @@ public class YioSelfController {
 		ysr.setFrozen(ys.getAccountStatus());
 		ysr.setIds(ys.getSellerId());
 		//冻结检测账户
-		yioSelfService.updateAccountStatus(ys.getId(), 1);
+		yioSelfService.updateAccountStatus(ys.getId(), ys.getAccountStatus());
 		//冻结支付账户
 		return yioSellerService.updateStatusList(ysr);
 	}

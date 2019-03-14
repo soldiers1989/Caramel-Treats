@@ -57,10 +57,10 @@ public interface YioSelfMapper {
 	int updateOpenOrClose(@Param("id")Integer id,@Param("accountStatus") Integer accountStatus);
 	
 	@Update("update yio_self set self_check_status=#{accountStatus} where order_id=#{orderId}")
-	int updateCheckStatusByOrder(@Param("orderId")Integer orderId,@Param("accountStatus") Integer accountStatus);
+	int updateCheckStatusByOrder(@Param("orderId")String orderId,@Param("accountStatus") Integer accountStatus);
 	
 	@Update("update yio_self set order_id=#{orderId} where id=#{id}")
-	int updateOrder(@Param("id")Integer id,@Param("orderId") Integer orderId);
+	int updateOrder(@Param("id")Integer id,@Param("orderId") String orderId);
 	
 	@Update("update yio_self set account_status=#{accountStatus} where id=#{id}")
 	int updateAccountStatus(@Param("id")Integer id,@Param("accountStatus") Integer accountStatus);

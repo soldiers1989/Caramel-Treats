@@ -37,6 +37,7 @@ import com.otc.api.mapper.YioShopRateMapper;
 import com.otc.api.pojo.order.Notify;
 import com.otc.api.pojo.order.OrderPoJo;
 import com.otc.api.pojo.order.Pay;
+import com.otc.api.pojo.order.ResponseOrder;
 import com.otc.api.pojo.user.UserList;
 import com.otc.api.util.DateUtils;
 import com.otc.api.util.FileUpload;
@@ -100,7 +101,7 @@ public class YioSelfService {
 		 * @return
 		 */
 		public int updateCheckStatusByOrder(Integer orderId,int accountStatus){
-			return yioSelfMapper.updateCheckStatusByOrder(orderId,accountStatus);
+			return yioSelfMapper.updateCheckStatusByOrder(String.valueOf(orderId),accountStatus);
 		}
 		
 		/**
@@ -109,8 +110,9 @@ public class YioSelfService {
 		 * @param accountStatus
 		 * @return
 		 * @throws AlipayApiException 
+		 * @throws MyException 
 		 */
-		public OrderPoJo CheckAccount(Integer payType,BigDecimal amount,String sellerId,Integer id) throws AlipayApiException{
+		public OrderPoJo CheckAccount(Integer payType,BigDecimal amount,String sellerId,Integer id) throws AlipayApiException, MyException{
 			Pay py =new Pay();
 			py.setAmount(amount);
 			py.setAppId(appid);
@@ -118,22 +120,30 @@ public class YioSelfService {
 			py.setOrderId(OrderUtil.getOrderNoByAtomic());
 			py.setPayType(payType);
 			py.setVersion(sellerId);
-			py.setTimestamp(String.valueOf(new Date().getTime()));
+			py.setTimestamp(DateUtils.getDateFromString5(new Date()));
+			py.setTimeExpire("");
 			Map<String, String> map = new HashMap<>();
 			map.put("appId",appid);
 			map.put("amount",py.getAmount().toString());
 			map.put("orderId",py.getOrderId());
 			map.put("payType",String.valueOf(py.getPayType()));
-			map.put("notify_url",notify_url);
+			map.put("notifyUrl",notify_url);
 			map.put("version",sellerId);
 			map.put("timestamp",py.getTimestamp());
+			map.put("timeExpire", "");
 			py.setSign(PayUtil.getSign(map,private_key));
+			map.put("sign", py.getSign());
 			Gson gs =new Gson();
 			String json = gs.toJson(py);
 			String sendPost = HttpRequest.sendPost(check_url, json);
-			OrderPoJo fromJson = gs.fromJson(sendPost, OrderPoJo.class);
-			yioSelfMapper.updateOrder(id,Integer.valueOf(fromJson.getOrderNo()));
-			return fromJson;
+			ResponseOrder fromJson = gs.fromJson(sendPost, ResponseOrder.class);
+			if(fromJson.getHeader().getCode()==0) {
+				OrderPoJo data = fromJson.getData();
+				yioSelfMapper.updateOrder(id,data.getOrderNo());
+				return data;
+			}else {
+				throw new MyException("100");
+			}
 		}
 		/**
 		 * 回调
@@ -181,9 +191,13 @@ public class YioSelfService {
 		 * @param 
 		 * @param 
 		 * @return
+		 * @throws MyException 
 		 */
-		public String getOrderStatus(String orderId){
+		public String getOrderStatus(String orderId) throws MyException{
 			List<YioOrders> findByMyOrderId = yioOrdersMapper.findByMyOrderId(orderId);
+			if(findByMyOrderId.size()==0) {
+				throw new MyException("100");
+			}
 			return findByMyOrderId.get(0).getPayStatus();
 		}
 		/**

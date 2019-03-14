@@ -40,21 +40,24 @@ public interface YioSysSettleMapper {
 
 	@Results({ @Result(property = "id", column = "id"),@Result(property = "orderNo", column = "order_no"),@Result(property = "name", column = "name"),@Result(property = "amount", column = "amount"),@Result(property = "bankCard", column = "bank_card"),@Result(property = "bankName", column = "bank_name"),@Result(property = "bankDeposit", column = "bank_deposit"),@Result(property = "status", column = "status"),@Result(property = "createTime", column = "create_time"),@Result(property = "userId", column = "user_id")})
 	@Select("<script>" +
-			"SELECT * FROM yio_sys_settle s,yio_user u where u.id =s.user_id " +
+			"SELECT s.*,u.username FROM yio_sys_settle s,yio_user u where u.id =s.user_id " +
 			"<if test=\"status!=null\">"+
 				"and s.status = #{status} " +
 			"</if>" +
 			"<if test=\"start!=null\">"+
-				"and s.create_time between #{start} and #{end} " +
+				"and create_time between #{start} and #{end} " +
 			"</if>" +
 			"<if test=\"name!=null and name!=''\">"+
-				"and s.name like \"%\"#{name}\"%\""+
+				"and name like \"%\"#{name}\"%\""+
 			"</if>"+
 			"<if test=\"bankCard!=null and bankCard!=''\">"+
-				"and s.bank_card like \"%\"#{bankCard}\"%\""+
+				"and bank_card like \"%\"#{bankCard}\"%\""+
 			"</if>"+
 			"<if test=\"username!=null and username!=''\">"+
-				"and s.username like \"%\"#{username}\"%\""+
+				"and username like \"%\"#{username}\"%\""+
+			"</if>"+
+			"<if test=\"username!=null and username!=''\">"+
+				"and username like \"%\"#{username}\"%\""+
 			"</if>"+
 			" order by s.create_time desc "+
 			"</script>")

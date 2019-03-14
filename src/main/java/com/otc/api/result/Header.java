@@ -44,6 +44,8 @@ public class Header {
 			this.message = "未找到该商户";
 		}else if(code == 50007) {
 			this.message = "商户名称已存在";
+		}else if(code == 60001) {
+			this.message = "不要重复添加组";
 		}
 	}
 

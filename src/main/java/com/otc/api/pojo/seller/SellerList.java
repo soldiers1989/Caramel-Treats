@@ -16,7 +16,9 @@ public class SellerList {
 
     //账户状态 1:冻结 2： 解冻
     private Integer userStatus ;
-    
+
+    private Integer userGroup;//1:在组 2：不再组
+
     public Integer getUserStatus() {
 		return userStatus;
 	}
@@ -95,5 +97,17 @@ public class SellerList {
 
     public void setCardNo(String cardNo) {
         this.cardNo = cardNo;
+    }
+
+    public Integer getUserGroup() {
+        if (userGroup==null){
+            return 2;
+        }else {
+            return 1;
+        }
+    }
+
+    public void setUserGroup(Integer userGroup) {
+        this.userGroup = userGroup;
     }
 }

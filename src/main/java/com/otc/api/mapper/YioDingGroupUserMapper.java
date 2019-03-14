@@ -35,5 +35,10 @@ public interface YioDingGroupUserMapper {
 	@Delete("delete from yio_ding_group_user where id=#{id}")
 	int delete(YioDingGroupUser yioDingGroupUser);
 
+	@Results({ @Result(property = "id", column = "id"),@Result(property = "sellerId", column = "seller_id"),@Result(property = "dingGroupId", column = "ding_group_id")})
+	@Select("SELECT * FROM yio_ding_group_user WHERE seller_id = #{sellerId}")
+	YioDingGroupUser findBySellerId(@Param("sellerId") Integer sellerId);
 
+	@Delete("delete from yio_ding_group_user where seller_id=#{sellerId}")
+	int deleteSeller(@Param("sellerId") Integer sellerId);
 }

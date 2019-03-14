@@ -41,11 +41,10 @@ public class YioSellerController {
 		return yioSellerService.list(id,pageNo,sizeNo);
 	}
 	
-//	@TokenAdmin
+	@TokenAdmin
 	@ApiOperation(value = "批量冻结付款账户", notes = "" ,response= YioSeller.class)
 	@RequestMapping(value = "/updateStatusList",method = RequestMethod.PUT,produces = "application/json")
 	public Object update(@RequestBody YioSeller ids) throws MyException{
-		
 		return yioSellerService.updateStatusList(ids);
 	}
 }

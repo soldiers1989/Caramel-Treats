@@ -55,9 +55,12 @@ public class YioSysSettleService {
 	 * @return
 	 */
 	public PageInfo<SettleList> list(Integer page, Integer size, Integer status, Date start ,Date end ,String name,String bankCard,String username) {
-		start = DateUtils.getStartDay(start);
-		end = DateUtils.getEndDay(end);
-
+		if (start!=null){
+			start = DateUtils.getStartDay(start);
+		}
+		if (end!=null){
+			end = DateUtils.getEndDay(end);
+		}
 		PageHelper.startPage(page,size);
 		List<SettleList> list = yioSysSettleMapper.queryByStatus(status,start,end,name,bankCard,username);
 		PageInfo<SettleList> info = new PageInfo<>(list);

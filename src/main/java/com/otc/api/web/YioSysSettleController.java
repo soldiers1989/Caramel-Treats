@@ -1,5 +1,6 @@
 package com.otc.api.web;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -11,6 +12,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import com.otc.api.domain.YioSysSettle;
 import com.otc.api.service.YioSysSettleService;
@@ -26,6 +29,13 @@ public class YioSysSettleController {
 
 	@Autowired
 	private YioSysSettleService yioSysSettleService;
+
+
+	@InitBinder
+	protected void initBinder(WebDataBinder binder) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
+	}
 
 	@TokenFinance
 	@ApiOperation(value = "财务清算列表", notes = "" ,response=YioSysSettle.class)

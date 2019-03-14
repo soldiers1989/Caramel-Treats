@@ -1,5 +1,6 @@
 package com.otc.api.web;
 
+import java.util.Date;
 import java.util.List;
 
 import com.otc.api.aop.Token;
@@ -30,10 +31,15 @@ public class YioSysSettleController {
 	@ApiOperation(value = "财务清算列表", notes = "" ,response=YioSysSettle.class)
 	@RequestMapping(value = "/list",method = RequestMethod.GET,produces = "application/json")
 	public Object list(@RequestParam(value = "status",required = false) Integer status,
+					   @RequestParam(value = "start",required = false) Date start,
+					   @RequestParam(value = "end",required = false) Date end,
+					   @RequestParam(value = "name",required = false) String name,
+					   @RequestParam(value = "bankCard",required = false) String bankCard,
+					   @RequestParam(value = "username",required = false) String username,
 					   @Param("page") Integer page, @Param("size") Integer size,HttpServletRequest request) throws MyException {
 		int sizeNo = size == null ? 10 : size.intValue();
 		int pageNo = page == null ? 1 : page.intValue();
-		return yioSysSettleService.list(pageNo,sizeNo,status);
+		return yioSysSettleService.list(pageNo,sizeNo,status,start,end,name,bankCard,username);
 	}
 
 	@TokenFinance

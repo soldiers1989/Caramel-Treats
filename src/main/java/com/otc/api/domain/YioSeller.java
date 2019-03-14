@@ -23,7 +23,7 @@ public class YioSeller {
 	private String qr;
 
 	private Integer frozen;
-	
+
 	public String getIds() {
 		return ids;
 	}

@@ -2,6 +2,7 @@ package com.otc.api.service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.github.pagehelper.PageHelper;
@@ -12,7 +13,9 @@ import com.otc.api.domain.YioSysSettleFile;
 import com.otc.api.mapper.YioAccountMapper;
 import com.otc.api.mapper.YioSysSettleFileMapper;
 import com.otc.api.mapper.YioWithdrawMapper;
+import com.otc.api.pojo.settle.SettleList;
 import com.otc.api.pojo.settle.SettleShow;
+import com.otc.api.util.DateUtils;
 import com.otc.api.util.HttpRequest;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,10 +54,13 @@ public class YioSysSettleService {
 	 * @param size
 	 * @return
 	 */
-	public PageInfo<YioSysSettle> list(Integer page,Integer size,Integer status) {
+	public PageInfo<SettleList> list(Integer page, Integer size, Integer status, Date start ,Date end ,String name,String bankCard,String username) {
+		start = DateUtils.getStartDay(start);
+		end = DateUtils.getEndDay(end);
+
 		PageHelper.startPage(page,size);
-		List<YioSysSettle> list = yioSysSettleMapper.queryByStatus(status);
-		PageInfo<YioSysSettle> info = new PageInfo<>(list);
+		List<SettleList> list = yioSysSettleMapper.queryByStatus(status,start,end,name,bankCard,username);
+		PageInfo<SettleList> info = new PageInfo<>(list);
 		return info;
 	}
 

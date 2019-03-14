@@ -139,6 +139,7 @@ public class YioSelfService {
 			ResponseOrder fromJson = gs.fromJson(sendPost, ResponseOrder.class);
 			if(fromJson.getHeader().getCode()==0) {
 				OrderPoJo data = fromJson.getData();
+				logger.error(data.getOrderNo()+"插入自检订单id");
 				yioSelfMapper.updateOrder(id,data.getOrderNo());
 				return data;
 			}else {
@@ -166,10 +167,9 @@ public class YioSelfService {
 			if (!PayUtil.getSign(map,yioShop.getPrivateKey()).equals(notify.getSign())){
 				throw new MyException("100");
 			}
-			
 			//
 			logger.info("回调成功"+notify.getOut_trade_no());
-			updateCheckStatusByOrder(notify.getOut_trade_no(), 2);
+			updateCheckStatusByOrder(notify.getTrade_no(), 2);
 			return null;
 		}
 		

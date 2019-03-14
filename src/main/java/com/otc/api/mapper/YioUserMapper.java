@@ -64,6 +64,12 @@ public interface YioUserMapper {
 			"<if test=\"type!=null\">"+
 			"and s.type = #{type}"+
 			"</if>"+
+			"<if test=\"status!=null\">"+
+			"and status = #{status}"+
+			"</if>"+
+			"<if test=\"payMentStatus!=null\">"+
+			"and s.frozen = #{payMentStatus}"+
+			"</if>"+
 			"<if test=\"minAccount!=null\">"+
 			"and c.amount &gt; #{minAccount}"+
 			"</if>"+
@@ -71,7 +77,7 @@ public interface YioUserMapper {
 			"and c.amount &lt; #{maxAccount}"+
 			"</if>"+
 			"</script>")
-	List<UserList> query(@Param("username") String username,@Param("name") String name,@Param("qname") String qname,@Param("work") Integer wrok,@Param("minAccount") Integer minAccount,@Param("maxAccount") Integer maxAccount,@Param("type") Integer type,@Param("bankNo") String bankNo);
+	List<UserList> query(@Param("username") String username,@Param("name") String name,@Param("qname") String qname,@Param("work") Integer wrok,@Param("minAccount") Integer minAccount,@Param("maxAccount") Integer maxAccount,@Param("type") Integer type,@Param("bankNo") String bankNo,@Param("status") Integer status,@Param("payMentStatus") Integer payMentStatus);
 
 
 	@Select("SELECT id,username,(select sum(amount) from yio_account where user_id = u.id) as amount,(SELECT sum(stream) FROM yio_bill where user_id = u.id) as reward,work,status,(select sum(amount) from yio_withdraw where user_id =u.id and pay_status = 1) as withdraw FROM yio_user u WHERE u.id=#{id}")

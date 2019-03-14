@@ -73,4 +73,15 @@ public interface YioSelfMapper {
 	@Select("SELECT s.id,s.type,s.name,a.username FROM yio_seller s left join yio_user a on s.user_id = a.id")
 	List<YioSelf> finds();
 
+	
+	@Update({
+	    "<script>"
+	            + "UPDATE yio_self SET account_status = #{status} WHERE seller_id in "
+	            + "<foreach item='item' index='index' collection='ids' open='(' separator=',' close=')'>"
+	            +       "#{item}"
+	            + "</foreach>" 
+	        +"</script>" 
+	        }
+	  )
+	int updateIds(@Param("ids")String[] ids,@Param("status") Integer status);
 }

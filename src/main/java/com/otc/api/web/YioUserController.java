@@ -53,13 +53,15 @@ public class YioUserController {
 					   @RequestParam(value = "bankNo",required = false) String bankNo,
 					   @RequestParam(value = "minAccount",required = false) Integer minAccount,
 					   @RequestParam(value = "maxAccount",required = false) Integer maxAccount,
+					   @RequestParam(value = "status",required = false) Integer status,
+					   @RequestParam(value = "payMentStatus",required = false) Integer payMentStatus,
 					   @RequestParam(value = "type",required = false) Integer type,
 					   @RequestParam(value = "work",required = false) Integer work,@Param("page") Integer page,
 					   @Param("size") Integer size,HttpServletRequest request) throws MyException {
 		YioShop user = (YioShop)request.getAttribute("user");
 		int sizeNo = size == null ? 10 : size.intValue();
 		int pageNo = page == null ? 1 : page.intValue();
-		return yioUserService.list(username,name,qname,work,pageNo,sizeNo,minAccount,maxAccount,type,bankNo);
+		return yioUserService.list(username,name,qname,work,pageNo,sizeNo,minAccount,maxAccount,type,bankNo,status,payMentStatus);
 	}
 
 	@TokenAdmin

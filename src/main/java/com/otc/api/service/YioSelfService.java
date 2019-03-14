@@ -177,15 +177,15 @@ public class YioSelfService {
 		}
 		
 		
-		public void insertAll(){
-			   List<YioSelf> yioSelves =yioSelfMapper.finds();
-			   for(YioSelf yioSelf:yioSelves){
-			      yioSelf.setSelfCheckStatus(0);
-			      yioSelf.setAccountStatus(2);
-			      yioSelf.setCreateDate(new Date());
-			      yioSelfMapper.insert(yioSelf);
-			   }
-			}
+//		public void insertAll(){
+//			   List<YioSelf> yioSelves =yioSelfMapper.finds();
+//			   for(YioSelf yioSelf:yioSelves){
+//			      yioSelf.setSelfCheckStatus(0);
+//			      yioSelf.setAccountStatus(2);
+//			      yioSelf.setCreateDate(new Date());
+//			      yioSelfMapper.insert(yioSelf);
+//			   }
+//			}
 		
 		/**
 		 * 定时获取订单状态

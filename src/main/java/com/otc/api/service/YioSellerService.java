@@ -10,12 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.otc.api.domain.YioSeller;
 import com.otc.api.exception.MyException;
+import com.otc.api.mapper.YioSelfMapper;
 import com.otc.api.mapper.YioSellerMapper;
 @Service
 public class YioSellerService {
 
 	@Autowired
 	private YioSellerMapper yioSellerMapper;
+	
+	@Autowired
+	private YioSelfMapper yioSelfMapper;
 
 	public PageInfo<SellerList> list(Integer id,Integer page,Integer size) {
 		PageHelper.startPage(page,size);
@@ -30,6 +34,8 @@ public class YioSellerService {
 		}
 		String[] split = ys.getIds().split(",");
 		yioSellerMapper.updateIds(split, ys.getFrozen());
+		//批量冻结自检账号
+		yioSelfMapper.updateIds(split, ys.getFrozen());
 		return 0;
 		
 	}

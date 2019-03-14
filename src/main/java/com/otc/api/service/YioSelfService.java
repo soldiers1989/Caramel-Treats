@@ -117,7 +117,7 @@ public class YioSelfService {
 			py.setAmount(amount);
 			py.setAppId(appid);
 			py.setNotifyUrl(notify_url);
-			py.setOrderId(OrderUtil.getOrderNoByAtomic());
+			py.setOrderId(OrderUtil.getOrderNoByAtomic()); 
 			py.setPayType(payType);
 			py.setVersion(sellerId);
 			py.setTimestamp(DateUtils.getDateFromStringT(new Date()));

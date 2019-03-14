@@ -100,8 +100,8 @@ public class YioSelfService {
 		 * @param accountStatus
 		 * @return
 		 */
-		public int updateCheckStatusByOrder(Integer orderId,int accountStatus){
-			return yioSelfMapper.updateCheckStatusByOrder(String.valueOf(orderId),accountStatus);
+		public int updateCheckStatusByOrder(String orderId,int accountStatus){
+			return yioSelfMapper.updateCheckStatusByOrder(orderId,accountStatus);
 		}
 		
 		/**
@@ -169,7 +169,7 @@ public class YioSelfService {
 			
 			//
 			logger.info("回调成功"+notify.getOut_trade_no());
-			updateCheckStatusByOrder(Integer.valueOf(notify.getOut_trade_no()), 2);
+			updateCheckStatusByOrder(notify.getOut_trade_no(), 2);
 			Map<String, String> mapReturn = new HashMap<>();
 			mapReturn.put("code","0");
 			Gson gson = new Gson();
@@ -177,15 +177,15 @@ public class YioSelfService {
 		}
 		
 		
-		public void insertAll(){
-			   List<YioSelf> yioSelves =yioSelfMapper.finds();
-			   for(YioSelf yioSelf:yioSelves){
-			      yioSelf.setSelfCheckStatus(0);
-			      yioSelf.setAccountStatus(2);
-			      yioSelf.setCreateDate(new Date());
-			      yioSelfMapper.insert(yioSelf);
-			   }
-			}
+//		public void insertAll(){
+//			   List<YioSelf> yioSelves =yioSelfMapper.finds();
+//			   for(YioSelf yioSelf:yioSelves){
+//			      yioSelf.setSelfCheckStatus(0);
+//			      yioSelf.setAccountStatus(2);
+//			      yioSelf.setCreateDate(new Date());
+//			      yioSelfMapper.insert(yioSelf);
+//			   }
+//			}
 		
 		/**
 		 * 定时获取订单状态

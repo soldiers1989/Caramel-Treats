@@ -87,6 +87,8 @@ public class YioOrdersService {
 		BigDecimal alipay = yioOrdersMapper.sumByPayType(shop.getAppId(),"alipay","已支付");
 		BigDecimal alipayred = yioOrdersMapper.sumByPayType(shop.getAppId(),"alipayred","已支付");
 		BigDecimal tradepre = yioOrdersMapper.sumByPayType(shop.getAppId(),"tradepre","已支付");
+		BigDecimal alipaydingtalk = yioOrdersMapper.sumByPayType(shop.getAppId(),"alipaydingtalk","已支付");
+
 		BigDecimal balance = new BigDecimal(0);
 		if (wechat==null){
 			wechat = new BigDecimal(0);
@@ -125,6 +127,17 @@ public class YioOrdersService {
 			BigDecimal ali = tradepre.subtract(arr);
 			balance = balance.add(ali);
 		}
+
+		if (alipaydingtalk==null){
+			alipaydingtalk = new BigDecimal(0);
+		}
+		YioShopRate alipaydingtalkRate = yioShopRateMapper.findAllByPayType(shop.getId(),5);
+		if (alipaydingtalkRate!=null){
+			BigDecimal arr = alipaydingtalk.multiply(alipaydingtalkRate.getRate());
+			BigDecimal ali = alipaydingtalk.subtract(arr);
+			balance = balance.add(ali);
+		}
+
 		BigDecimal withdraw = yioWithdrawMapper.sum(shop.getAppId());
 		if (withdraw==null){
 			withdraw = new BigDecimal(0);

@@ -1,6 +1,8 @@
 package com.otc.api.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 public class YioSeller {
 
 	//
@@ -22,8 +24,120 @@ public class YioSeller {
 	//
 	private String qr;
 
-	private Integer frozen;
 	
+	private String pid;
+
+	private String appId;
+
+	private String privateKey;
+
+	private String publicKey;
+
+	private Integer face;//1开始 2 停止
+
+	private BigDecimal amount;//充值随机立减金额
+
+	private String payType;
+
+	private String cardNo;
+
+	private Integer bankId;
+
+	private Integer frozen;//1：冻结 2：解冻
+
+	private String dingUser;//钉钉UserId
+
+	private List<YioPant> pants;
+	
+	
+	public String getPid() {
+		return pid;
+	}
+
+	public void setPid(String pid) {
+		this.pid = pid;
+	}
+
+	public String getAppId() {
+		return appId;
+	}
+
+	public void setAppId(String appId) {
+		this.appId = appId;
+	}
+
+	public String getPrivateKey() {
+		return privateKey;
+	}
+
+	public void setPrivateKey(String privateKey) {
+		this.privateKey = privateKey;
+	}
+
+	public String getPublicKey() {
+		return publicKey;
+	}
+
+	public void setPublicKey(String publicKey) {
+		this.publicKey = publicKey;
+	}
+
+	public Integer getFace() {
+		return face;
+	}
+
+	public void setFace(Integer face) {
+		this.face = face;
+	}
+
+	public BigDecimal getAmount() {
+		return amount;
+	}
+
+	public void setAmount(BigDecimal amount) {
+		this.amount = amount;
+	}
+
+	public String getPayType() {
+		return payType;
+	}
+
+	public void setPayType(String payType) {
+		this.payType = payType;
+	}
+
+	public String getCardNo() {
+		return cardNo;
+	}
+
+	public void setCardNo(String cardNo) {
+		this.cardNo = cardNo;
+	}
+
+	public Integer getBankId() {
+		return bankId;
+	}
+
+	public void setBankId(Integer bankId) {
+		this.bankId = bankId;
+	}
+
+	public String getDingUser() {
+		return dingUser;
+	}
+
+	public void setDingUser(String dingUser) {
+		this.dingUser = dingUser;
+	}
+
+	public List<YioPant> getPants() {
+		return pants;
+	}
+
+	public void setPants(List<YioPant> pants) {
+		this.pants = pants;
+	}
+
 	public String getIds() {
 		return ids;
 	}

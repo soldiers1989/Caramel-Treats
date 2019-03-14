@@ -40,7 +40,12 @@ public class DateUtils {
 		return newDate;
 	}
 
-
+	public static Date addDateMinute(Date date ,int i) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.MINUTE, i);
+		return calendar.getTime();
+	}
 	public static String getDateFromString(Date date) {
 		SimpleDateFormat simple = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		simple.setTimeZone(TimeZone.getTimeZone("GMT+8"));

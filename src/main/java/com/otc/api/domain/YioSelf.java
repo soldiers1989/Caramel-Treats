@@ -1,5 +1,6 @@
 package com.otc.api.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class YioSelf {
@@ -18,10 +19,39 @@ public class YioSelf {
 	private Integer accountStatus;
 	//支付账户id
 	private String sellerId;
+	//订单id
+	private String orderId;
+	//创建时间
+	private BigDecimal amount;
 	
+
+	public BigDecimal getAmount() {
+		return amount;
+	}
+
+	public void setAmount(BigDecimal amount) {
+		this.amount = amount;
+	}
+
+	public String getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
+	}
+
 	private Date createDate;
 	
 	
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
 	public String getSellerId() {
 		return sellerId;
 	}
@@ -30,13 +60,6 @@ public class YioSelf {
 		this.sellerId = sellerId;
 	}
 
-	public Date getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
-	}
 
 	public void setId(Integer id){
 		this.id=id;

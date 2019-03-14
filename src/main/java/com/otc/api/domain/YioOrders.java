@@ -2,6 +2,11 @@ package com.otc.api.domain;
 
 import java.math.BigDecimal;
 import java.util.Date;
+
+import com.otc.api.pojo.order.Pay;
+import com.otc.api.util.DateUtils;
+import com.otc.api.util.OrderUtil;
+import com.otc.api.util.StringUtils;
 public class YioOrders {
 
 	//
@@ -13,7 +18,7 @@ public class YioOrders {
 	//
 	private BigDecimal payPrice;
 	//
-	private String payStatus;
+	private String  payStatus;
 	//
 	private String payType;
 	//
@@ -36,7 +41,36 @@ public class YioOrders {
 	private Integer userId;
 	//1:未到帐 2:已到帐 3:已过期 4:部帐 5:清算
 	private Integer type;
-
+	public YioOrders() {
+	}
+	public YioOrders(YioSeller yioSeller,Pay pay,String payType) {
+		this.orderId = OrderUtil.getOrderNoByAtomic();
+		this.orderPrice = pay.getAmount();
+		this.payPrice = yioSeller.getAmount();
+		this.payStatus = "未支付";
+		this.payType = payType;
+		this.payFormat = payFormat;
+		this.payQr = pay.getAppId();
+		this.redirectUrl = pay.getNotifyUrl();
+		this.extension = pay.getOrderId();
+		this.createdAt = new Date();
+		this.updatedAt = updatedAt;
+		if (StringUtils.isBlank(pay.getTimeExpire())) {
+			this.deletedAt = DateUtils.addDateMinute(this.getCreatedAt(),5);
+		}else {
+			this.deletedAt = DateUtils.parseDate(pay.getTimeExpire());
+		}
+		this.sellerId = yioSeller.getId();
+		this.userId = yioSeller.getUserId();
+		this.type = 1;
+	}
+	
+	public String getPayStatus() {
+		return payStatus;
+	}
+	public void setPayStatus(String payStatus) {
+		this.payStatus = payStatus;
+	}
 	public void setId(Integer id){
 		this.id=id;
 	}
@@ -69,13 +103,6 @@ public class YioOrders {
 		this.payPrice = payPrice;
 	}
 
-	public void setPayStatus(String payStatus){
-		this.payStatus=payStatus;
-	}
-
-	public String getPayStatus(){
-		return payStatus;
-	}
 
 	public void setPayType(String payType){
 		this.payType=payType;

@@ -170,21 +170,13 @@ public class YioSelfService {
 			//
 			logger.info("回调成功"+notify.getOut_trade_no());
 			updateCheckStatusByOrder(notify.getOut_trade_no(), 2);
-			Map<String, String> mapReturn = new HashMap<>();
-			mapReturn.put("code","0");
-			Gson gson = new Gson();
-			return gson.toJson(mapReturn);
+			return null;
 		}
 		
 		
-//		public void insertAll(){
-//			   List<YioSelf> yioSelves =yioSelfMapper.finds();
-//			   for(YioSelf yioSelf:yioSelves){
-//			      yioSelf.setSelfCheckStatus(0);
-//			      yioSelf.setAccountStatus(2);
-//			      yioSelf.setCreateDate(new Date());
-//			      yioSelfMapper.insert(yioSelf);
-//			   }
+//		public Object insertAll(){
+//			
+//			return updateCheckStatusByOrder("123", 2);
 //			}
 		
 		/**

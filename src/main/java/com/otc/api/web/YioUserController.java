@@ -44,7 +44,7 @@ public class YioUserController {
 		return yioUserService.report(user);
 	}
 
-	@Token
+//	@Token
 	@ApiOperation(value = "交易员列表", notes = "" ,response=YioUser.class)
 	@RequestMapping(value = "/list",method = RequestMethod.GET,produces = "application/json")
 	public Object list(@RequestParam(value = "username",required = false) String username,

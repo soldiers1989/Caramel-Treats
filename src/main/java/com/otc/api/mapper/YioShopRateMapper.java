@@ -60,4 +60,8 @@ public interface YioShopRateMapper {
 	@Results({ @Result(property = "id", column = "id"),@Result(property = "payType", column = "pay_type"),@Result(property = "rate", column = "rate"),@Result(property = "shopId", column = "shop_id"),@Result(property = "disable", column = "disable")})
 	@Select("SELECT id,pay_type,rate,shop_id,disable FROM yio_shop_rate where shop_id = #{shopId}")
 	List<YioShopRate> findAllByShopId(@Param("shopId") Integer shopId);
+	
+	@Results({ @Result(property = "id", column = "id"),@Result(property = "payType", column = "pay_type"),@Result(property = "rate", column = "rate"),@Result(property = "shopId", column = "shop_id")})
+	@Select("SELECT * FROM yio_shop_rate where shop_id = #{shopId} and pay_type = #{payType}")
+	List<YioShopRate> findAllByShopIdAndPayType(@Param("shopId") Integer shopId,@Param("payType") Integer payType);
 }

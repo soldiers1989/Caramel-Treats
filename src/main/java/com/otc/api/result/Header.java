@@ -37,7 +37,7 @@ public class Header {
 		} else if (code == 40002) {
 			this.message = "用户令牌错误";
 		}else if(code == 50001) {
-			this.message = "商户新增参数错误";
+			this.message = "参数错误";
 		}else if(code == 50002) {
 			this.message = "商户禁/启用失败";
 		}else if(code == 50003) {

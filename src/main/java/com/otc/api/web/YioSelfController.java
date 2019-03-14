@@ -9,13 +9,16 @@ import io.swagger.annotations.ApiOperation;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alipay.api.AlipayApiException;
 import com.otc.api.aop.Token;
+import com.otc.api.domain.YioOrders;
 import com.otc.api.domain.YioSelf;
 import com.otc.api.domain.YioSeller;
 import com.otc.api.domain.YioShop;
@@ -23,6 +26,7 @@ import com.otc.api.domain.YioShopRate;
 import com.otc.api.service.YioSelfService;
 import com.otc.api.service.YioSellerService;
 import com.otc.api.exception.MyException;
+import com.otc.api.pojo.order.Notify;
 
 @Api("描述")
 @RestController
@@ -55,7 +59,7 @@ public class YioSelfController {
 	 * @return
 	 * @throws MyException
 	 */
-	@Token
+//	@Token
 	@ApiOperation(value = "自检列表", notes = "", response = YioSelf.class)
 	@RequestMapping(value = "/list", method = RequestMethod.GET, produces = "application/json")
 	public Object list(@RequestParam(value = "payType", required = false) Integer payType,
@@ -76,11 +80,22 @@ public class YioSelfController {
 	}
 
 	@ApiOperation(value = "检测账户", notes = "", response = YioShopRate.class)
-	@RequestMapping(value = "/CheckAccount", method = RequestMethod.POST, produces = "application/json")
-	public Object CheckAccount(@RequestBody YioSelf ys) {
-		return yioSelfService.updateCheckStatus(ys.getId(), ys.getSelfCheckStatus());
+	@RequestMapping(value = "/checkAccount", method = RequestMethod.POST, produces = "application/json")
+	public Object CheckAccount(@RequestBody YioSelf ys) throws AlipayApiException, MyException {
+		return yioSelfService.CheckAccount(ys.getPayType(), ys.getAmount(),ys.getSellerId(),ys.getId());
 	}
 
+	@ApiOperation(value = "回调", notes = "" ,response=YioOrders.class)
+	@RequestMapping(value = "/notify",method = RequestMethod.POST,produces = "application/json")
+	public Object notify(@RequestBody Notify notify) throws Exception {
+		return yioSelfService.notify(notify);
+	}
+	@ApiOperation(value = "定时获取订单状态", notes = "" ,response=YioOrders.class)
+	@RequestMapping(value = "/getOrderStatus/{orderId}",method = RequestMethod.GET,produces = "application/json")
+	public Object getOrderStatus(@PathVariable("orderId") String orderId) throws MyException {
+		return yioSelfService.getOrderStatus(orderId);
+	}
+	
 	/**
 	 * 1:冻结  2：解冻
 	 * @param ys
@@ -93,8 +108,15 @@ public class YioSelfController {
 		YioSeller ysr =new YioSeller();
 		ysr.setFrozen(ys.getAccountStatus());
 		ysr.setIds(ys.getSellerId());
+		//冻结检测账户
+		yioSelfService.updateAccountStatus(ys.getId(), ys.getAccountStatus());
 		//冻结支付账户
-		yioSellerService.updateStatusList(ysr);
-		return yioSelfService.updateCheckStatus(ys.getId(), ys.getAccountStatus());
+		return yioSellerService.updateStatusList(ysr);
 	}
+	
+//	@ApiOperation(value = "插入交易员数据", notes = "", response=Integer.class)
+//	@RequestMapping(value = "/insert",method = RequestMethod.POST,produces = "application/json")
+//	public Object insertAll(){
+//		return yioSelfService.updateCheckStatusByOrder("4888,4889", 1);
+//	}
 }

@@ -67,9 +67,9 @@ public class YioUserService {
 	 * @param size
 	 * @return
 	 */
-	public PageInfo<UserList> list(String username, String name, String qname,Integer work, Integer page, Integer size,Integer minAccount,Integer maxAccount,Integer type,String bankNo){
+	public PageInfo<UserList> list(String username, String name, String qname,Integer work, Integer page, Integer size,Integer minAccount,Integer maxAccount,Integer type,String bankNo,Integer status,Integer payMentStatus){
 		PageHelper.startPage(page,size);
-		List<UserList> lists = yioUserMapper.query(username,name,qname,work,minAccount,maxAccount,type,bankNo);
+		List<UserList> lists = yioUserMapper.query(username,name,qname,work,minAccount,maxAccount,type,bankNo,status,payMentStatus);
 		PageInfo<UserList> info = new PageInfo<>(lists);
 		return info;
 	}

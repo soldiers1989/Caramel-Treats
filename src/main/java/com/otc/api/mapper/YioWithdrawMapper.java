@@ -45,13 +45,13 @@ public interface YioWithdrawMapper {
 	@Select("SELECT sum(amount) FROM yio_withdraw where app_id =#{appId} and pay_status = #{payStatus}")
 	BigDecimal sumByStatus(@Param("appId") String appId, @Param("payStatus") Integer payStatus);
 
-	@Select("SELECT sum(amount) FROM yio_withdraw where app_id =#{appId}")
+	@Select("SELECT sum(amount) FROM yio_withdraw where app_id =#{appId} and pay_status !=4")
 	BigDecimal sum(@Param("appId") String appId);
 
 	@Select("SELECT count(id) FROM yio_withdraw where app_id =#{appId} and pay_status = #{payStatus}")
 	Integer countByStatus(@Param("appId") String appId, @Param("payStatus") Integer payStatus);
 
-	@Select("SELECT count(id) FROM yio_withdraw where app_id =#{appId}")
+	@Select("SELECT count(id) FROM yio_withdraw where app_id =#{appId} and pay_status !=4")
 	Integer countByAppId(@Param("appId") String appId);
 
 	@Select("SELECT sum(amount) FROM yio_withdraw where app_id =#{appId} and pay_status = #{payStatus} and date(createdAt) = date(#{date})")
@@ -136,7 +136,7 @@ public interface YioWithdrawMapper {
 
 
 	@Select("<script>" +
-			"select o.id,s.qname as qname ,o.bank_card as bankNo,o.createdAt,o.orderId as orderId,o.withdraw_no as extension, o.amount as orderPrice,o.amount as payPrice,o.pay_status as type,u.username as username from yio_withdraw o,yio_user u,yio_seller s where u.id = o.user_id and o.seller_id = s.id and o.app_id=#{appId}" +
+			"select o.id,s.qname as qname ,o.bank_card as bankNo,o.createdAt,o.orderId as orderId,o.withdraw_no as extension, o.amount as orderPrice,o.amount as payPrice,o.pay_status as type,u.username as username from yio_withdraw o left join yio_user u on u.id = o.user_id left join yio_seller s on s.id = o.seller_id where o.app_id=#{appId}" +
 			"<if test=\"start!=null\">"+
 				"and o.createdAt between #{start} and #{end} " +
 			"</if>" +

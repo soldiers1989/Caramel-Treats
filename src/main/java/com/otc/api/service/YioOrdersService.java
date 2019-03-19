@@ -1,6 +1,7 @@
 package com.otc.api.service;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -76,7 +77,7 @@ public class YioOrdersService {
 	 * @param shop
 	 * @return
 	 */
-	public Index index(Integer id,YioShop shop){
+	public Index index(Integer id,YioShop shop) throws ParseException {
 		if (shop.getAuthority().equals(1)){
 			if (id == 0){
 				shop = yioShopMapper.findAll().get(0);
@@ -92,20 +93,22 @@ public class YioOrdersService {
 		//保底金额
 		YioShopEnsure shopEnsure = shopEnsureMapper.findByShopId(shop.getId());
 		if (shopEnsure!=null && shopEnsure.getStatus().equals(1)){
-			List<DateOrder> dateOrders = yioOrdersMapper.groupByCreateTime(shopEnsure.getCreateTime());
-			for (DateOrder order : dateOrders){
+			Integer day = DateUtils.daysBetween(shopEnsure.getCreateTime(),DateUtils.startDate(new Date()));
+			for (int i = 0;i<day;i++){
+				Date date = DateUtils.addDate(shopEnsure.getCreateTime(),i);
+				BigDecimal amount = yioOrdersMapper.sumByDate(shop.getAppId(),DateUtils.startDate(date),"已支付");
 				//计算费率
-				if (order.getAmount().compareTo(shopEnsure.getAmount())<0){
+				if (amount.compareTo(shopEnsure.getAmount())<0){
 					//手续费
 					BigDecimal fee = shopEnsure.getAmount().multiply(shopEnsure.getRate());
 					//余额
-					BigDecimal b = order.getAmount().subtract(fee);
+					BigDecimal b = amount.subtract(fee);
 					balance = balance.add(b);
 				}else {
 					//手续费
-					BigDecimal fee = order.getAmount().multiply(shopEnsure.getRate());
+					BigDecimal fee = amount.multiply(shopEnsure.getRate());
 					//余额
-					BigDecimal b = order.getAmount().subtract(fee);
+					BigDecimal b = amount.subtract(fee);
 					balance = balance.add(b);
 				}
 			}

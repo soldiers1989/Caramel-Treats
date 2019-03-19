@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
 
 @Api("首页")
 @RestController
@@ -23,7 +24,7 @@ public class IndexController {
     @Token
     @ApiOperation(value = "首页", notes = "" ,response=YioShop.class)
     @RequestMapping(value = "/index/{id}",method = RequestMethod.GET,produces = "application/json")
-    public Object index(@PathVariable("id") Integer id,HttpServletRequest request) throws MyException {
+    public Object index(@PathVariable("id") Integer id,HttpServletRequest request) throws MyException, ParseException {
         YioShop user=(YioShop)request.getAttribute("user");
         return yioOrdersService.index(id,user);
     }

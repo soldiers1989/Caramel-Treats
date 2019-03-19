@@ -214,4 +214,7 @@ public interface YioOrdersMapper {
 
 	@Select("select DATE_FORMAT(createdAt,'%Y-%m-%d') as date,sum(order_price) as amount from yio_orders where createdAt>#{date} group by date")
 	List<DateOrder> groupByCreateTime(@Param("date") Date date);
+
+	@Select("select sum(order_price) from yio_orders where createdAt between #{start} and #{end}")
+	BigDecimal sumByCreateTime(@Param("start") Date start,@Param("end") Date end);
 }

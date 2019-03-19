@@ -36,7 +36,7 @@ public interface YioShopMapper {
 	List<Shop> findId(@Param("id") Integer id);
 
 	@Results({ @Result(property = "id", column = "id"),@Result(property = "name", column = "name"),@Result(property = "privateKey", column = "private_key"),@Result(property = "createAt", column = "createAt"),@Result(property = "appId", column = "app_id"),@Result(property = "username", column = "username"),@Result(property = "password", column = "password"),@Result(property = "loginTime", column = "login_time"),@Result(property = "authority", column = "authority"),@Result(property = "token", column = "token")})
-	@Select("SELECT id,name FROM yio_shop s,yio_shop_group g ,yio_sys_user u  WHERE g.shop_id = s.id and u.id = g.sys_user_id and u.id = #{userId}")
+	@Select("SELECT s.id,s.name FROM yio_shop s,yio_shop_group g ,yio_sys_user u  WHERE g.shop_id = s.id and u.id = g.sys_user_id and u.id = #{userId}")
 	List<Shop> findGroupShops(@Param("userId") Integer userId);
 
 	@Results({ @Result(property = "id", column = "id"),@Result(property = "name", column = "name"),@Result(property = "privateKey", column = "private_key"),@Result(property = "createAt", column = "createAt"),@Result(property = "appId", column = "app_id"),@Result(property = "username", column = "username"),@Result(property = "password", column = "password"),@Result(property = "loginTime", column = "login_time"),@Result(property = "authority", column = "authority"),@Result(property = "token", column = "token"),@Result(property = "disable", column = "disable")})

@@ -35,5 +35,7 @@ public interface YioShopGroupMapper {
 	@Delete("delete from yio_shop_group where id=#{id}")
 	int delete(YioShopGroup yioShopGroup);
 
-
+	@Results({ @Result(property = "id", column = "id"),@Result(property = "shopId", column = "shop_id"),@Result(property = "sysUserId", column = "sys_user_id")})
+	@Select("SELECT * FROM yio_shop_group where sys_user_id = #{userId}")
+	List<YioShopGroup> findBySysUserId(@Param("userId") Integer userId);
 }

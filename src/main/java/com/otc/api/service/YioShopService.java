@@ -6,8 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.otc.api.domain.YioSysUser;
-import com.otc.api.domain.YioUser;
+import com.otc.api.domain.*;
 import com.otc.api.exception.MyException;
 import com.otc.api.mapper.*;
 import com.otc.api.pojo.shop.Shop;
@@ -25,10 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.StringUtil;
-import com.otc.api.domain.YioPayType;
-import com.otc.api.domain.YioShop;
-import com.otc.api.domain.YioShopDeposit;
-import com.otc.api.domain.YioShopRate;
 
 @Service
 public class YioShopService {
@@ -80,9 +75,15 @@ public class YioShopService {
 		if (shop.getAuthority().equals(1) || shop.getAuthority().equals(4)){
 			List<Shop> find = yioShopMapper.find();
 			return find;
-		}else if (shop.getAuthority().equals(5)){
-			List<Shop> find = yioShopMapper.findGroupShops(shop.getUserId());
-			return find;
+		}else if (shop.getAuthority().equals(2)){
+			List<YioShopGroup> groups = yioShopGroupMapper.findBySysUserId(shop.getUserId());
+			if (groups.size()>0){
+				List<Shop> find = yioShopMapper.findGroupShops(shop.getUserId());
+				return find;
+			}else {
+				List<Shop> findId = yioShopMapper.findId(shop.getId());
+				return findId;
+			}
 		}else {
 			List<Shop> findId = yioShopMapper.findId(shop.getId());
 			return findId;

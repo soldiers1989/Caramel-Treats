@@ -97,6 +97,9 @@ public class YioOrdersService {
 			for (int i = 0;i<day;i++){
 				Date date = DateUtils.addDate(shopEnsure.getCreateTime(),i);
 				BigDecimal amount = yioOrdersMapper.sumByDate(shop.getAppId(),DateUtils.startDate(date),"已支付");
+				if (amount==null){
+					amount = new BigDecimal(0);
+				}
 				//计算费率
 				if (amount.compareTo(shopEnsure.getAmount())<0){
 					//手续费

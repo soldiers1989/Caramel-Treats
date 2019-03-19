@@ -29,7 +29,9 @@ public class YioShop {
 	private BigDecimal rate;
 
 	private Integer disable;
-	
+
+	private Integer userId;
+
 	private List<YioShopRate> shopRateList;
 	
 	private Integer shopRateSize;
@@ -144,5 +146,13 @@ public class YioShop {
 
 	public void setRate(BigDecimal rate) {
 		this.rate = rate;
+	}
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 }

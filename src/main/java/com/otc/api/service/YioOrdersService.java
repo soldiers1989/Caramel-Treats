@@ -15,6 +15,7 @@ import com.otc.api.exception.MyException;
 import com.otc.api.mapper.*;
 import com.otc.api.pojo.index.Index;
 import com.otc.api.pojo.index.IndexReport;
+import com.otc.api.pojo.order.DateOrder;
 import com.otc.api.pojo.order.OrderList;
 import com.otc.api.pojo.order.OrderReport;
 import com.otc.api.pojo.socket.Socket;
@@ -60,6 +61,9 @@ public class YioOrdersService {
 	@Autowired
 	private YioShopRateMapper yioShopRateMapper;
 
+	@Autowired
+	private YioShopEnsureMapper shopEnsureMapper;
+
 	@Value("${WEB_SOCKET}")
 	private String WEB_SOCKET;
 
@@ -83,61 +87,82 @@ public class YioOrdersService {
 			shop = yioShopMapper.findById(shop.getId());
 		}
 		Index index = new Index();
-		BigDecimal wechat = yioOrdersMapper.sumByPayType(shop.getAppId(),"wechat","已支付");
-		BigDecimal alipay = yioOrdersMapper.sumByPayType(shop.getAppId(),"alipay","已支付");
-		BigDecimal alipayred = yioOrdersMapper.sumByPayType(shop.getAppId(),"alipayred","已支付");
-		BigDecimal tradepre = yioOrdersMapper.sumByPayType(shop.getAppId(),"tradepre","已支付");
-		BigDecimal alipaydingtalk = yioOrdersMapper.sumByPayType(shop.getAppId(),"alipaydingtalk","已支付");
 
 		BigDecimal balance = new BigDecimal(0);
-		if (wechat==null){
-			wechat = new BigDecimal(0);
-		}
-		YioShopRate wechatRate = yioShopRateMapper.findAllByPayType(shop.getId(),2);
-		if (wechatRate!=null){
-			BigDecimal wr = wechat.multiply(wechatRate.getRate());
-			balance = wechat.subtract(wr);
-		}
-		if (alipay==null){
-			alipay = new BigDecimal(0);
-		}
-		YioShopRate alipayRate = yioShopRateMapper.findAllByPayType(shop.getId(),1);
-		if (alipayRate!=null){
-			BigDecimal ar = alipay.multiply(alipayRate.getRate());
-			BigDecimal ali = alipay.subtract(ar);
-			balance = balance.add(ali);
-		}
+		//保底金额
+		YioShopEnsure shopEnsure = shopEnsureMapper.findByShopId(shop.getId());
+		if (shopEnsure!=null && shopEnsure.getStatus().equals(1)){
+			List<DateOrder> dateOrders = yioOrdersMapper.groupByCreateTime(shopEnsure.getCreateTime());
+			for (DateOrder order : dateOrders){
+				//计算费率
+				if (order.getAmount().compareTo(shopEnsure.getAmount())<0){
+					//手续费
+					BigDecimal fee = shopEnsure.getAmount().multiply(shopEnsure.getRate());
+					//余额
+					BigDecimal b = order.getAmount().subtract(fee);
+					balance = balance.add(b);
+				}else {
+					//手续费
+					BigDecimal fee = order.getAmount().multiply(shopEnsure.getRate());
+					//余额
+					BigDecimal b = order.getAmount().subtract(fee);
+					balance = balance.add(b);
+				}
+			}
+		}else{
+			BigDecimal wechat = yioOrdersMapper.sumByPayType(shop.getAppId(),"wechat","已支付");
+			BigDecimal alipay = yioOrdersMapper.sumByPayType(shop.getAppId(),"alipay","已支付");
+			BigDecimal alipayred = yioOrdersMapper.sumByPayType(shop.getAppId(),"alipayred","已支付");
+			BigDecimal tradepre = yioOrdersMapper.sumByPayType(shop.getAppId(),"tradepre","已支付");
+			BigDecimal alipaydingtalk = yioOrdersMapper.sumByPayType(shop.getAppId(),"alipaydingtalk","已支付");
+			if (wechat==null){
+				wechat = new BigDecimal(0);
+			}
+			YioShopRate wechatRate = yioShopRateMapper.findAllByPayType(shop.getId(),2);
+			if (wechatRate!=null){
+				BigDecimal wr = wechat.multiply(wechatRate.getRate());
+				balance = wechat.subtract(wr);
+			}
+			if (alipay==null){
+				alipay = new BigDecimal(0);
+			}
+			YioShopRate alipayRate = yioShopRateMapper.findAllByPayType(shop.getId(),1);
+			if (alipayRate!=null){
+				BigDecimal ar = alipay.multiply(alipayRate.getRate());
+				BigDecimal ali = alipay.subtract(ar);
+				balance = balance.add(ali);
+			}
 
-		if (alipayred==null){
-			alipayred = new BigDecimal(0);
-		}
+			if (alipayred==null){
+				alipayred = new BigDecimal(0);
+			}
 
-		YioShopRate alipayRedRate = yioShopRateMapper.findAllByPayType(shop.getId(),3);
-		if (alipayRedRate!=null){
-			BigDecimal arr = alipayred.multiply(alipayRedRate.getRate());
-			BigDecimal ali = alipayred.subtract(arr);
-			balance = balance.add(ali);
-		}
-		if (tradepre==null){
-			tradepre = new BigDecimal(0);
-		}
-		YioShopRate faceRate = yioShopRateMapper.findAllByPayType(shop.getId(),4);
-		if (faceRate!=null){
-			BigDecimal arr = tradepre.multiply(faceRate.getRate());
-			BigDecimal ali = tradepre.subtract(arr);
-			balance = balance.add(ali);
-		}
+			YioShopRate alipayRedRate = yioShopRateMapper.findAllByPayType(shop.getId(),3);
+			if (alipayRedRate!=null){
+				BigDecimal arr = alipayred.multiply(alipayRedRate.getRate());
+				BigDecimal ali = alipayred.subtract(arr);
+				balance = balance.add(ali);
+			}
+			if (tradepre==null){
+				tradepre = new BigDecimal(0);
+			}
+			YioShopRate faceRate = yioShopRateMapper.findAllByPayType(shop.getId(),4);
+			if (faceRate!=null){
+				BigDecimal arr = tradepre.multiply(faceRate.getRate());
+				BigDecimal ali = tradepre.subtract(arr);
+				balance = balance.add(ali);
+			}
 
-		if (alipaydingtalk==null){
-			alipaydingtalk = new BigDecimal(0);
+			if (alipaydingtalk==null){
+				alipaydingtalk = new BigDecimal(0);
+			}
+			YioShopRate alipaydingtalkRate = yioShopRateMapper.findAllByPayType(shop.getId(),5);
+			if (alipaydingtalkRate!=null){
+				BigDecimal arr = alipaydingtalk.multiply(alipaydingtalkRate.getRate());
+				BigDecimal ali = alipaydingtalk.subtract(arr);
+				balance = balance.add(ali);
+			}
 		}
-		YioShopRate alipaydingtalkRate = yioShopRateMapper.findAllByPayType(shop.getId(),5);
-		if (alipaydingtalkRate!=null){
-			BigDecimal arr = alipaydingtalk.multiply(alipaydingtalkRate.getRate());
-			BigDecimal ali = alipaydingtalk.subtract(arr);
-			balance = balance.add(ali);
-		}
-
 		BigDecimal withdraw = yioWithdrawMapper.sum(shop.getAppId());
 		if (withdraw==null){
 			withdraw = new BigDecimal(0);
@@ -149,7 +174,6 @@ public class YioOrdersService {
 			withdraw = new BigDecimal(0);
 		}
 		index.setTodayBalance(balance.subtract(withdraw));
-
 		index.setTodayCount(yioOrdersMapper.countByCreateDate(shop.getAppId(),DateUtils.startDate(new Date())));
 		index.setWithdraw(yioWithdrawMapper.sumByStatus(shop.getAppId(),1));
 		index.setWithdrawCount(yioWithdrawMapper.countByStatus(shop.getAppId(),1));

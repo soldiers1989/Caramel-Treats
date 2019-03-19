@@ -62,7 +62,7 @@ public class TokenAspect {
 				if (user==null){
 					return g.toJson(new ApiResult(40002));
 				}else {
-					if (user.getAuthority().equals(1) || user.getAuthority().equals(2)){
+					if (user.getAuthority().equals(1) || user.getAuthority().equals(2) || user.getAuthority().equals(5)){
 						YioShop shop = new YioShop();
 						if (user.getServerId()==null){
 							shop.setId(0);
@@ -71,6 +71,7 @@ public class TokenAspect {
 						}
 						shop.setUsername(user.getUsername());
 						shop.setAuthority(user.getAuthority());
+						shop.setUserId(user.getId());
 						request.setAttribute("user",shop);
 						request.setAttribute("token",uuid);
 					}else if (user.getAuthority().equals(3) || user.getAuthority().equals(4)){

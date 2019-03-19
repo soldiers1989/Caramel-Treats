@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.otc.api.pojo.index.IndexReport;
+import com.otc.api.pojo.order.DateOrder;
 import com.otc.api.pojo.order.OrderList;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
@@ -210,5 +211,7 @@ public interface YioOrdersMapper {
 	@Results({ @Result(property = "id", column = "id"),@Result(property = "orderId", column = "order_id"),@Result(property = "orderPrice", column = "order_price"),@Result(property = "payPrice", column = "pay_price"),@Result(property = "payStatus", column = "pay_status"),@Result(property = "payType", column = "pay_type"),@Result(property = "payFormat", column = "pay_format"),@Result(property = "payQr", column = "pay_qr"),@Result(property = "redirectUrl", column = "redirect_url"),@Result(property = "extension", column = "extension"),@Result(property = "createdAt", column = "createdAt"),@Result(property = "updatedAt", column = "updatedAt"),@Result(property = "deletedAt", column = "deletedAt"),@Result(property = "sellerId", column = "seller_id"),@Result(property = "userId", column = "user_id")})
 	@Select("SELECT * FROM yio_orders WHERE order_id = #{orderId}")
 	List<YioOrders> findByMyOrderId(@Param("orderId") String orderId);
-	
+
+	@Select("select DATE_FORMAT(createdAt,'%Y-%m-%d') as date,sum(order_price) as amount from yio_orders where createdAt>#{date} group by date")
+	List<DateOrder> groupByCreateTime(@Param("date") Date date);
 }

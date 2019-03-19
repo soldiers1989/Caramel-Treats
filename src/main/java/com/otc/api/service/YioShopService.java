@@ -80,7 +80,7 @@ public class YioShopService {
 		if (shop.getAuthority().equals(1) || shop.getAuthority().equals(4)){
 			List<Shop> find = yioShopMapper.find();
 			return find;
-		}else if (shop.getAuthority().equals(2)){
+		}else if (shop.getAuthority().equals(5)){
 			List<Shop> find = yioShopMapper.findGroupShops(shop.getUserId());
 			return find;
 		}else {

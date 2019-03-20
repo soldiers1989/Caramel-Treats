@@ -38,6 +38,9 @@ public class YioWithdrawService {
 	@Autowired
 	private YioShopMapper yioShopMapper;
 
+	@Autowired
+	private YioShopGroupMapper yioShopGroupMapper;
+
 	@Value("${PAY_URL}")
 	private String PAY_URL;
 
@@ -50,7 +53,12 @@ public class YioWithdrawService {
 				shop = yioShopMapper.findById(id);
 			}
 		}else if (shop.getAuthority().equals(2)){
-			shop = yioShopMapper.findById(id);
+			List<YioShopGroup> groups = yioShopGroupMapper.findBySysUserId(shop.getUserId());
+			if (groups.size()>0){
+				shop = yioShopMapper.findById(groups.get(0).getShopId());
+			}else {
+				shop = yioShopMapper.findById(id);
+			}
 		}else {
 			shop = yioShopMapper.findById(shop.getId());
 		}
@@ -87,7 +95,12 @@ public class YioWithdrawService {
 				shop = yioShopMapper.findById(id);
 			}
 		}else if (shop.getAuthority().equals(2)){
-			shop = yioShopMapper.findById(id);
+			List<YioShopGroup> groups = yioShopGroupMapper.findBySysUserId(shop.getUserId());
+			if (groups.size()>0){
+				shop = yioShopMapper.findById(groups.get(0).getShopId());
+			}else {
+				shop = yioShopMapper.findById(id);
+			}
 		}else {
 			shop = yioShopMapper.findById(shop.getId());
 		}

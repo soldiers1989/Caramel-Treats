@@ -84,6 +84,8 @@ public class YioOrdersService {
 			}else {
 				shop = yioShopMapper.findById(id);
 			}
+		}else if (shop.getAuthority().equals(2)){
+			shop = yioShopMapper.findById(id);
 		}else {
 			shop = yioShopMapper.findById(shop.getId());
 		}
@@ -216,6 +218,8 @@ public class YioOrdersService {
 			}else {
 				shop = yioShopMapper.findById(id);
 			}
+		}else if (shop.getAuthority().equals(2)){
+			shop = yioShopMapper.findById(id);
 		}else {
 			shop = yioShopMapper.findById(shop.getId());
 		}
@@ -251,6 +255,8 @@ public class YioOrdersService {
 			}else {
 				shop = yioShopMapper.findById(id);
 			}
+		}else if (shop.getAuthority().equals(2)){
+			shop = yioShopMapper.findById(id);
 		}else {
 			shop = yioShopMapper.findById(shop.getId());
 		}

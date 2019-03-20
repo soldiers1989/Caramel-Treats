@@ -72,6 +72,7 @@ public class TokenAspect {
 						shop.setUsername(user.getUsername());
 						shop.setAuthority(user.getAuthority());
 						shop.setUserId(user.getId());
+						shop.setAuthority(user.getAuthority());
 						request.setAttribute("user",shop);
 						request.setAttribute("token",uuid);
 					}else if (user.getAuthority().equals(3) || user.getAuthority().equals(4)){

@@ -81,22 +81,24 @@ public class YioOrdersService {
 	 * @return
 	 */
 	public Index index(Integer id,YioShop shop) throws ParseException {
-		if (shop.getAuthority().equals(1)){
-			if (id == 0){
-				shop = yioShopMapper.findAll().get(0);
-			}else {
-				shop = yioShopMapper.findById(id);
-			}
-		}else if (shop.getAuthority().equals(2)){
-			List<YioShopGroup> groups = yioShopGroupMapper.findBySysUserId(shop.getUserId());
-			if (groups.size()>0){
-				shop = yioShopMapper.findById(groups.get(0).getShopId());
-			}else {
-				shop = yioShopMapper.findById(id);
-			}
-		}else {
-			shop = yioShopMapper.findById(shop.getId());
-		}
+        if (shop.getAuthority().equals(1)){
+            if (id == 0){
+                shop = yioShopMapper.findAll().get(0);
+            }else {
+                shop = yioShopMapper.findById(id);
+            }
+        }else if (shop.getAuthority().equals(2)){
+            if (id!=0){
+                shop = yioShopMapper.findById(id);
+            }else {
+                List<YioShopGroup> groups = yioShopGroupMapper.findBySysUserId(shop.getUserId());
+                if (groups.size()>0){
+                    shop = yioShopMapper.findById(groups.get(0).getShopId());
+                }
+            }
+        }else {
+            shop = yioShopMapper.findById(shop.getId());
+        }
 		Index index = new Index();
 
 		BigDecimal balance = new BigDecimal(0);
@@ -229,22 +231,24 @@ public class YioOrdersService {
 
 	public OrderReport report(Integer id,YioShop shop,Date start,Date end,Integer type,String orderNo,String serverNo,String userName){
 		OrderReport report = new OrderReport();
-		if (shop.getAuthority().equals(1)){
-			if (id == 0){
-				shop = yioShopMapper.findAll().get(0);
-			}else {
-				shop = yioShopMapper.findById(id);
-			}
-		}else if (shop.getAuthority().equals(2)){
-			List<YioShopGroup> groups = yioShopGroupMapper.findBySysUserId(shop.getUserId());
-			if (groups.size()>0){
-				shop = yioShopMapper.findById(groups.get(0).getShopId());
-			}else {
-				shop = yioShopMapper.findById(id);
-			}
-		}else {
-			shop = yioShopMapper.findById(shop.getId());
-		}
+        if (shop.getAuthority().equals(1)){
+            if (id == 0){
+                shop = yioShopMapper.findAll().get(0);
+            }else {
+                shop = yioShopMapper.findById(id);
+            }
+        }else if (shop.getAuthority().equals(2)){
+            if (id!=0){
+                shop = yioShopMapper.findById(id);
+            }else {
+                List<YioShopGroup> groups = yioShopGroupMapper.findBySysUserId(shop.getUserId());
+                if (groups.size()>0){
+                    shop = yioShopMapper.findById(groups.get(0).getShopId());
+                }
+            }
+        }else {
+            shop = yioShopMapper.findById(shop.getId());
+        }
 		if (type.equals(1)){
 			start = DateUtils.getStartDay(DateUtils.startDate(new Date()));
 			end = DateUtils.getEndDay(DateUtils.startDate(new Date()));
@@ -271,22 +275,24 @@ public class YioOrdersService {
 	}
 
 	public PageInfo<OrderList> list(Integer id, YioShop shop, Date start, Date end, Integer type, String orderNo, String serverNo, String userName,String qname, Integer status,Integer page,Integer size){
-		if (shop.getAuthority().equals(1)){
-			if (id == 0){
-				shop = yioShopMapper.findAll().get(0);
-			}else {
-				shop = yioShopMapper.findById(id);
-			}
-		}else if (shop.getAuthority().equals(2)){
-			List<YioShopGroup> groups = yioShopGroupMapper.findBySysUserId(shop.getUserId());
-			if (groups.size()>0){
-				shop = yioShopMapper.findById(groups.get(0).getShopId());
-			}else {
-				shop = yioShopMapper.findById(id);
-			}
-		}else {
-			shop = yioShopMapper.findById(shop.getId());
-		}
+        if (shop.getAuthority().equals(1)){
+            if (id == 0){
+                shop = yioShopMapper.findAll().get(0);
+            }else {
+                shop = yioShopMapper.findById(id);
+            }
+        }else if (shop.getAuthority().equals(2)){
+            if (id!=0){
+                shop = yioShopMapper.findById(id);
+            }else {
+                List<YioShopGroup> groups = yioShopGroupMapper.findBySysUserId(shop.getUserId());
+                if (groups.size()>0){
+                    shop = yioShopMapper.findById(groups.get(0).getShopId());
+                }
+            }
+        }else {
+            shop = yioShopMapper.findById(shop.getId());
+        }
 		if (type.equals(1)){
 			start = DateUtils.getStartDay(DateUtils.startDate(new Date()));
 			end = DateUtils.getEndDay(DateUtils.startDate(new Date()));

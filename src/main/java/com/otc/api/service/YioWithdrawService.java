@@ -53,11 +53,13 @@ public class YioWithdrawService {
 				shop = yioShopMapper.findById(id);
 			}
 		}else if (shop.getAuthority().equals(2)){
-			List<YioShopGroup> groups = yioShopGroupMapper.findBySysUserId(shop.getUserId());
-			if (groups.size()>0){
-				shop = yioShopMapper.findById(groups.get(0).getShopId());
-			}else {
+			if (id!=0){
 				shop = yioShopMapper.findById(id);
+			}else {
+				List<YioShopGroup> groups = yioShopGroupMapper.findBySysUserId(shop.getUserId());
+				if (groups.size()>0){
+					shop = yioShopMapper.findById(groups.get(0).getShopId());
+				}
 			}
 		}else {
 			shop = yioShopMapper.findById(shop.getId());
@@ -95,11 +97,13 @@ public class YioWithdrawService {
 				shop = yioShopMapper.findById(id);
 			}
 		}else if (shop.getAuthority().equals(2)){
-			List<YioShopGroup> groups = yioShopGroupMapper.findBySysUserId(shop.getUserId());
-			if (groups.size()>0){
-				shop = yioShopMapper.findById(groups.get(0).getShopId());
-			}else {
+			if (id!=0){
 				shop = yioShopMapper.findById(id);
+			}else {
+				List<YioShopGroup> groups = yioShopGroupMapper.findBySysUserId(shop.getUserId());
+				if (groups.size()>0){
+					shop = yioShopMapper.findById(groups.get(0).getShopId());
+				}
 			}
 		}else {
 			shop = yioShopMapper.findById(shop.getId());

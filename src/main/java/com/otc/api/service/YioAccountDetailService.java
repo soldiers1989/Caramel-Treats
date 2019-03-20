@@ -6,6 +6,8 @@ import java.util.List;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.otc.api.domain.YioShop;
+import com.otc.api.domain.YioShopGroup;
+import com.otc.api.mapper.YioShopGroupMapper;
 import com.otc.api.mapper.YioShopMapper;
 import com.otc.api.pojo.detail.DetailPoJo;
 import com.otc.api.pojo.detail.DetailReport;
@@ -22,6 +24,9 @@ public class YioAccountDetailService {
 
 	@Autowired
 	private YioShopMapper yioShopMapper;
+
+	@Autowired
+	private YioShopGroupMapper yioShopGroupMapper;
 
 	public PageInfo<DetailPoJo> list(Integer page, Integer size, YioShop shop, String orderNo, String serverNo, Date start,Date end,Integer type) {
 		shop = yioShopMapper.findById(shop.getId());
@@ -48,6 +53,17 @@ public class YioAccountDetailService {
 			}else {
 				shop = yioShopMapper.findById(id);
 			}
+		}else if (shop.getAuthority().equals(2)){
+			if (id!=0){
+				shop = yioShopMapper.findById(id);
+			}else {
+				List<YioShopGroup> groups = yioShopGroupMapper.findBySysUserId(shop.getUserId());
+				if (groups.size()>0){
+					shop = yioShopMapper.findById(groups.get(0).getShopId());
+				}
+			}
+		}else {
+			shop = yioShopMapper.findById(shop.getId());
 		}
 		PageHelper.startPage(page,size);
 		List<DetailServerPoJo> detailPoJos = yioAccountDetailMapper.queryByServer(shop.getAppId(),orderNo,serverNo,start,end,type);
@@ -62,6 +78,17 @@ public class YioAccountDetailService {
 			}else {
 				shop = yioShopMapper.findById(id);
 			}
+		}else if (shop.getAuthority().equals(2)){
+			if (id!=0){
+				shop = yioShopMapper.findById(id);
+			}else {
+				List<YioShopGroup> groups = yioShopGroupMapper.findBySysUserId(shop.getUserId());
+				if (groups.size()>0){
+					shop = yioShopMapper.findById(groups.get(0).getShopId());
+				}
+			}
+		}else {
+			shop = yioShopMapper.findById(shop.getId());
 		}
 		DetailReport report = new DetailReport();
 		report.setInTotal(yioAccountDetailMapper.querySum(shop.getAppId(),orderNo,serverNo,start,end));
